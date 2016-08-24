@@ -6,9 +6,9 @@ namespace Bacon\Entities;
 use GraphAware\Neo4j\OGM\Annotations as OGM;
 
 /**
- * @OGM\Node(label="Organization")
+ * @OGM\Node(label="Repository")
  */
-final class Organization
+final class Repository
 {
     /**
      * @OGM\GraphId()
@@ -21,6 +21,12 @@ final class Organization
      * @var string
      */
     private $name;
+
+    /**
+     * @OGM\Property(type="string")
+     * @var string
+     */
+    private $fullName;
 
     /**
      * @OGM\Property(type="string")
@@ -76,6 +82,22 @@ final class Organization
     public function setName(string $name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFullName(): string
+    {
+        return $this->fullName;
+    }
+
+    /**
+     * @param string $fullName
+     */
+    public function setFullName(string $fullName)
+    {
+        $this->fullName = $fullName;
     }
 
     /**
