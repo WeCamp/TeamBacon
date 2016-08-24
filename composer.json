@@ -5,5 +5,8 @@
   ],
   "config": {
     "secure-http":false
+  },
+  "require": {
+    "silex/silex": "~2.0"
   }
 }
