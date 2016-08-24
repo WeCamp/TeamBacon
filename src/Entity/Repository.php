@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Bacon\Entities;
+namespace Bacon\Entity;
 
 use GraphAware\Neo4j\OGM\Annotations as OGM;
 
 /**
- * @OGM\Node(label="User")
+ * @OGM\Node(label="Repository")
  */
-final class User
+final class Repository
 {
     /**
      * @OGM\GraphId()
@@ -26,13 +26,7 @@ final class User
      * @OGM\Property(type="string")
      * @var string
      */
-    private $login;
-
-    /**
-     * @OGM\Property(type="string")
-     * @var string
-     */
-    private $bio;
+    private $fullName;
 
     /**
      * @OGM\Property(type="string")
@@ -93,33 +87,17 @@ final class User
     /**
      * @return string
      */
-    public function getLogin(): string
+    public function getFullName(): string
     {
-        return $this->login;
+        return $this->fullName;
     }
 
     /**
-     * @param string $login
+     * @param string $fullName
      */
-    public function setLogin(string $login)
+    public function setFullName(string $fullName)
     {
-        $this->login = $login;
-    }
-
-    /**
-     * @return string
-     */
-    public function getBio(): string
-    {
-        return $this->bio;
-    }
-
-    /**
-     * @param string $bio
-     */
-    public function setBio(string $bio)
-    {
-        $this->bio = $bio;
+        $this->fullName = $fullName;
     }
 
     /**
