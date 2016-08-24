@@ -3,13 +3,15 @@ declare(strict_types=1);
 
 namespace Bacon\Service\Crawler\Dto;
 
+use Bacon\Service\Crawler\Bags\LanguageBag;
+
 class Repository
 {
     protected $blog;
     protected $description;
     protected $fullName;
     protected $id;
-    protected $lang = [];
+    protected $lang;
     protected $name;
     protected $url;
 
@@ -66,9 +68,9 @@ class Repository
     }
 
     /**
-     * @return array
+     * @return LanguageBag
      */
-    public function getLang(): array
+    public function getLang()
     {
         return $this->lang;
     }
@@ -130,9 +132,9 @@ class Repository
     }
 
     /**
-     * @param array $lang
+     * @param LanguageBag $lang
      */
-    public function setLang(array $lang)
+    public function setLang(LanguageBag $lang)
     {
         $this->lang = $lang;
 
