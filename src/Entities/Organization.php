@@ -11,7 +11,8 @@ use GraphAware\Neo4j\OGM\Annotations as OGM;
 final class Organization
 {
     /**
-     * @OGM\Property(type="int")
+     * @OGM\GraphId()
+     * @var int
      */
     protected $id;
 
