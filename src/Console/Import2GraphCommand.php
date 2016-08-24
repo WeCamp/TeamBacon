@@ -40,8 +40,7 @@ class Import2GraphCommand extends Command
 
 
         if ('user' === $object) {
-
-
+            $this->handleUsers($output);
         }
 
 
@@ -61,7 +60,10 @@ class Import2GraphCommand extends Command
 
         $controller = new \Bacon\Service\Crawler\Controllers\CrawlerController();
         $org = $controller->getData();
-        $users = $org->getMembers();
+        $userBag = $org->getMembers();
+
+        var_dump($userBag->first());
+        die;
         $graphUsers = [];
 
         foreach ($users as $user) {
@@ -77,5 +79,9 @@ class Import2GraphCommand extends Command
     private function transformUser(User $user)
     {
         $node = new \Bacon\Entity\User();
+        // User->login -> User->username
+
+        $node->setName($user->getName());
+        var_dump($node);
     }
 }
