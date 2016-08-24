@@ -7,6 +7,6 @@
     "secure-http":false
   },
   "require": {
-    "silex/silex": "~2.0"
+    "slim/slim-skeleton": "^3.1"
   }
 }
