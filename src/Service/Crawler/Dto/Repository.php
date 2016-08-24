@@ -1,6 +1,7 @@
 <?php
+declare(strict_types=1);
 
-namespace Bacon\Service\Crawler\Entities;
+namespace Bacon\Service\Crawler\Dto;
 
 class Repository
 {
