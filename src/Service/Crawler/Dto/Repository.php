@@ -10,9 +10,7 @@ class Repository
     protected $fullName;
     protected $id;
     protected $lang = [];
-    protected $location;
     protected $name;
-    protected $tags = [];
     protected $url;
 
     static public function createFromJson(string $json)
@@ -27,9 +25,8 @@ class Repository
         $organization = new self;
         $organization->setBlog($object->blog)
             ->setDescription($object->description)
-            ->setFullName($object->fullName)
+            ->setFullName($object->full_name)
             ->setId($object->id)
-            ->setLocation($object->location)
             ->setName($object->name)
             ->setUrl($object->url);
 
@@ -79,25 +76,9 @@ class Repository
     /**
      * @return mixed
      */
-    public function getLocation()
-    {
-        return $this->location;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * @return array
-     */
-    public function getTags(): array
-    {
-        return $this->tags;
     }
 
     /**
@@ -159,31 +140,11 @@ class Repository
     }
 
     /**
-     * @param mixed $location
-     */
-    public function setLocation($location)
-    {
-        $this->location = $location;
-
-        return $this;
-    }
-
-    /**
      * @param mixed $name
      */
     public function setName($name)
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * @param array $tags
-     */
-    public function setTags(array $tags)
-    {
-        $this->tags = $tags;
 
         return $this;
     }
