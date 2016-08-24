@@ -53,7 +53,16 @@ class CrawlerController
             $repoBag = new RepositoryBag([]);
             foreach ($repoObject as $object)
             {
-                $repoBag->add(Repository::createFromObject($object));
+                $repo = Repository::createFromObject($object);
+                $contents = $this->makeRequest($this->apiURL . 'repos/' . $repo->getFullName() . '/languages');
+                $languageArray = json_decode($contents);
+                $languageBag = new LanguageBag([]);
+                foreach ($languageArray as $language => $characters)
+                {
+                    $languageBag->add(new Language($language, $characters));
+                }
+                $repo->setLang($languageBag);
+                $repoBag->add($repo);
             }
             $user->setRepos($repoBag);
             $userBag->add($user);
@@ -70,15 +79,14 @@ class CrawlerController
         foreach ($repoObject as $object)
         {
             $repo = Repository::createFromObject($object);
-
-            $contents = $this->makeRequest($this->apiURL . 'repos/' . $organisation . '/' . $repo->getName() . '/languages');
-            $languageArray = json_decode($contents);
-            $languageBag = new LanguageBag([]);
-            foreach ($languageArray as $language => $characters)
-            {
-                $languageBag->add(new Language($language, $characters));
-            }
-            $repo->setLang($languageBag);
+//            $contents = $this->makeRequest($this->apiURL . 'repos/' . $organisation . '/' . $repo->getName() . '/languages');
+//            $languageArray = json_decode($contents);
+//            $languageBag = new LanguageBag([]);
+//            foreach ($languageArray as $language => $characters)
+//            {
+//                $languageBag->add(new Language($language, $characters));
+//            }
+//            $repo->setLang($languageBag);
             $repoBag->add($repo);
         }
 
@@ -96,7 +104,6 @@ class CrawlerController
         }
 
         $client = new \GuzzleHttp\Client();
-        $client = new \GuzzleHttp\Client(['auth' => ['cgoosey1', 'fd02b8c1505ab24e1f56352a3ced11f1d69fd376']]);
         $res = $client->get($url . '?per_page=100');
 
         $contents = $res->getBody()->getContents();
