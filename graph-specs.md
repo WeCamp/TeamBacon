@@ -15,7 +15,6 @@
     * etc.
     
 * Team
-* Tag
 * Language
 
 
@@ -40,16 +39,12 @@
 
 * Organisation : OWNS -> Repository
 
-    
-* Tag
-* Language
-
-
-Create relation
-
- (Keanu)-[:ACTED_IN {roles:['Neo']}]->(TheMatrixReloaded),
+* Repository : USES -> Language
 
 
 Transformer:
 User->login -> User->username
 
+## Useful neo4j / cy[her ]links
+* [http://www.remwebdevelopment.com/blog/sql/some-basic-and-useful-cypher-queries-for-neo4j-201.html]()
+* [https://www.sitepoint.com/discover-graph-databases-neo4j-php/]()
