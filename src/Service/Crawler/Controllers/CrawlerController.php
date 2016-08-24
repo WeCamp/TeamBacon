@@ -4,8 +4,10 @@ declare(strict_types=1);
 namespace Bacon\Service\Crawler\Controllers;
 
 
+use Bacon\Service\Crawler\Bags\LanguageBag;
 use Bacon\Service\Crawler\Bags\RepositoryBag;
 use Bacon\Service\Crawler\Bags\UserBag;
+use Bacon\Service\Crawler\Dto\Language;
 use Bacon\Service\Crawler\Dto\Organization;
 use Bacon\Service\Crawler\Dto\Repository;
 use Bacon\Service\Crawler\Dto\User;
@@ -13,9 +15,14 @@ use Bacon\Service\Crawler\Dto\User;
 class CrawlerController
 {
     protected $useCachedResponses = true;
-    protected $cacheDir = __DIR__ . '/../../../../cache/Crawler/';
+    protected $cacheDir;
     protected $apiURL = 'https://api.github.com/';
     protected $organization = 'wecamp';
+
+    public function __construct()
+    {
+        $this->cacheDir = __DIR__ . '/../../../../cache/Crawler/';
+    }
 
     public function getData()
     {
@@ -23,8 +30,8 @@ class CrawlerController
         $orgObject = json_decode($contents);
         $org = Organization::createFromObject($orgObject);
 
-        $userBag = $this->getUsers($this->organization);
-        $repoBag = $this->getRepos($this->organization);
+        $userBag = $this->getOrganisationUsers($this->organization);
+        $repoBag = $this->getOrganisationRepos($this->organization);
 
         $org->setMembers($userBag);
         $org->setRepos($repoBag);
@@ -32,7 +39,7 @@ class CrawlerController
         return $org;
     }
 
-    protected function getUsers($organisation)
+    protected function getOrganisationUsers($organisation)
     {
         $contents = $this->makeRequest($this->apiURL . 'orgs/'. $organisation .'/members');
         $membersObject = json_decode($contents);
@@ -46,7 +53,16 @@ class CrawlerController
             $repoBag = new RepositoryBag([]);
             foreach ($repoObject as $object)
             {
-                $repoBag->add(Repository::createFromObject($object));
+                $repo = Repository::createFromObject($object);
+                $contents = $this->makeRequest($this->apiURL . 'repos/' . $repo->getFullName() . '/languages');
+                $languageArray = json_decode($contents);
+                $languageBag = new LanguageBag([]);
+                foreach ($languageArray as $language => $characters)
+                {
+                    $languageBag->add(new Language($language, $characters));
+                }
+                $repo->setLang($languageBag);
+                $repoBag->add($repo);
             }
             $user->setRepos($repoBag);
             $userBag->add($user);
@@ -55,14 +71,23 @@ class CrawlerController
         return $userBag;
     }
 
-    protected function getRepos($organisation)
+    protected function getOrganisationRepos($organisation)
     {
         $contents = $this->makeRequest($this->apiURL . 'orgs/' . $organisation . '/repos');
         $repoObject = json_decode($contents);
         $repoBag = new RepositoryBag([]);
         foreach ($repoObject as $object)
         {
-            $repoBag->add(Repository::createFromObject($object));
+            $repo = Repository::createFromObject($object);
+//            $contents = $this->makeRequest($this->apiURL . 'repos/' . $organisation . '/' . $repo->getName() . '/languages');
+//            $languageArray = json_decode($contents);
+//            $languageBag = new LanguageBag([]);
+//            foreach ($languageArray as $language => $characters)
+//            {
+//                $languageBag->add(new Language($language, $characters));
+//            }
+//            $repo->setLang($languageBag);
+            $repoBag->add($repo);
         }
 
         return $repoBag;
