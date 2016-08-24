@@ -22,15 +22,7 @@ class CrawlerController
         $orgObject = json_decode($contents);
         $org = Organization::createFromObject($orgObject);
 
-        $contents = $this->makeRequest($this->apiURL . 'orgs/wecamp/members');
-        $membersObject = json_decode($contents);
-        $userBag = new UserBag([]);
-        foreach ($membersObject as $object)
-        {
-            $contents = $this->makeRequest($this->apiURL . 'users/' . $object->login);
-            $userObject = json_decode($contents);
-            $userBag->add(User::createFromObject($userObject));
-        }
+        $userBag = $this->getUsers('wecamp');
 
         $contents = $this->makeRequest($this->apiURL . 'orgs/wecamp/repos');
         $repoObject = json_decode($contents);
@@ -43,7 +35,30 @@ class CrawlerController
         $org->setMembers($userBag);
         $org->setRepos($repoBag);
 
-        print_r($org);
+        return $org;
+    }
+
+    protected function getUsers($organisation)
+    {
+        $contents = $this->makeRequest($this->apiURL . 'orgs/'. $organisation .'/members');
+        $membersObject = json_decode($contents);
+        $userBag = new UserBag([]);
+        foreach ($membersObject as $object)
+        {
+            $contents = $this->makeRequest($this->apiURL . 'users/' . $object->login);
+            $user = User::createFromJson($contents);
+            $contents = $this->makeRequest($this->apiURL . 'users/' . $object->login . '/repos');
+            $repoObject = json_decode($contents);
+            $repoBag = new RepositoryBag([]);
+            foreach ($repoObject as $object)
+            {
+                $repoBag->add(Repository::createFromObject($object));
+            }
+            $user->setRepos($repoBag);
+            $userBag->add($user);
+        }
+
+        return $userBag;
     }
 
     protected function makeRequest($url)
