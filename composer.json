@@ -15,7 +15,8 @@
     "slim/slim-skeleton": "^3.1",
     "graphaware/neo4j-php-client": "^4.0",
     "graphaware/neo4j-php-ogm": "^1.0@beta",
-    "guzzlehttp/guzzle": "^6.2"
+    "guzzlehttp/guzzle": "^6.2",
+    "symfony/console": "^3.1"
 
   }
 }
