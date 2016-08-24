@@ -6,7 +6,7 @@ namespace Bacon\Service\Crawler\Bags;
 
 use Bacon\Service\Crawler\Dto\Repository;
 
-class UserBag extends BaseBag
+class RepositoryBag extends BaseBag
 {
     public function __construct(array $items)
     {

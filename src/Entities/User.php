@@ -6,9 +6,9 @@ namespace Bacon\Entities;
 use GraphAware\Neo4j\OGM\Annotations as OGM;
 
 /**
- * @OGM\Node(label="Organization")
+ * @OGM\Node(label="User")
  */
-final class Organization
+final class User
 {
     /**
      * @OGM\GraphId()
@@ -21,6 +21,18 @@ final class Organization
      * @var string
      */
     private $name;
+
+    /**
+     * @OGM\Property(type="string")
+     * @var string
+     */
+    private $login;
+
+    /**
+     * @OGM\Property(type="string")
+     * @var string
+     */
+    private $bio;
 
     /**
      * @OGM\Property(type="string")
@@ -76,6 +88,38 @@ final class Organization
     public function setName(string $name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLogin(): string
+    {
+        return $this->login;
+    }
+
+    /**
+     * @param string $login
+     */
+    public function setLogin(string $login)
+    {
+        $this->login = $login;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBio(): string
+    {
+        return $this->bio;
+    }
+
+    /**
+     * @param string $bio
+     */
+    public function setBio(string $bio)
+    {
+        $this->bio = $bio;
     }
 
     /**
