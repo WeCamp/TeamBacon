@@ -6,6 +6,11 @@
   "config": {
     "secure-http":false
   },
+  "autoload": {
+    "psr-4": {
+      "Bacon\\": "src/"
+    }
+  },
   "require": {
     "slim/slim-skeleton": "^3.1",
     "graphaware/neo4j-php-client": "^4.0",

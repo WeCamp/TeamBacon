@@ -1,6 +1,6 @@
 <?php
-namespace App\Crawler\Entities;
 
+namespace Bacon\Service\Crawler\Entities;
 
 class Organization
 {

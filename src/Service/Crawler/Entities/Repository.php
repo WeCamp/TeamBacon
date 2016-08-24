@@ -1,8 +1,8 @@
 <?php
-namespace App\Crawler\Entities;
 
+namespace Bacon\Service\Crawler\Entities;
 
-class Organization
+class Repository
 {
     protected $blog;
     protected $description;
