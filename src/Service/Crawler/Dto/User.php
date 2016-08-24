@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Bacon\Service\Crawler\Dto;
 
+use Bacon\Service\Crawler\Bags\RepositoryBag;
+
 class User
 {
     protected $bio;
@@ -13,7 +15,7 @@ class User
     protected $location;
     protected $login;
     protected $name;
-    protected $repos = [];
+    protected $repos;
     protected $starred = [];
     protected $subscriptions = [];
     protected $url;
@@ -104,9 +106,9 @@ class User
     }
 
     /**
-     * @return array
+     * @return RepositoryBag
      */
-    public function getRepos(): array
+    public function getRepos()
     {
         return $this->repos;
     }
@@ -216,9 +218,9 @@ class User
     }
 
     /**
-     * @param array $repos
+     * @param RepositoryBag $repos
      */
-    public function setRepos(array $repos)
+    public function setRepos(RepositoryBag $repos)
     {
         $this->repos = $repos;
 

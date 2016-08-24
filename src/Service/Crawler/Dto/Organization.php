@@ -3,15 +3,18 @@ declare(strict_types=1);
 
 namespace Bacon\Service\Crawler\Dto;
 
+use Bacon\Service\Crawler\Bags\RepositoryBag;
+use Bacon\Service\Crawler\Bags\UserBag;
+
 class Organization
 {
     protected $blog;
     protected $description;
     protected $id;
     protected $location;
-    protected $members = [];
+    protected $members;
     protected $name;
-    protected $repos = [];
+    protected $repos;
     protected $url;
 
     static public function createFromJson(string $json)
@@ -107,17 +110,17 @@ class Organization
     }
 
     /**
-     * @return array
+     * @return UserBag
      */
-    public function getMembers(): array
+    public function getMembers()
     {
         return $this->members;
     }
 
     /**
-     * @param array $members
+     * @param UserBag $members
      */
-    public function setMembers(array $members)
+    public function setMembers(UserBag $members)
     {
         $this->members = $members;
 
@@ -143,17 +146,17 @@ class Organization
     }
 
     /**
-     * @return array
+     * @return RepositoryBag
      */
-    public function getRepos(): array
+    public function getRepos()
     {
         return $this->repos;
     }
 
     /**
-     * @param array $repos
+     * @param RepositoryBag $repos
      */
-    public function setRepos(array $repos)
+    public function setRepos(RepositoryBag $repos)
     {
         $this->repos = $repos;
 

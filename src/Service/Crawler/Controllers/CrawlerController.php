@@ -4,31 +4,46 @@ declare(strict_types=1);
 namespace Bacon\Service\Crawler\Controllers;
 
 
+use Bacon\Service\Crawler\Bags\RepositoryBag;
 use Bacon\Service\Crawler\Bags\UserBag;
 use Bacon\Service\Crawler\Dto\Organization;
+use Bacon\Service\Crawler\Dto\Repository;
 use Bacon\Service\Crawler\Dto\User;
 
 class CrawlerController
 {
     protected $useCachedResponses = true;
     protected $cacheDir = __DIR__ . '/../../../../cache/Crawler/';
-    protected $organizationURL = 'https://api.github.com/orgs/wecamp';
+    protected $apiURL = 'https://api.github.com/';
 
     public function getData()
     {
-        $contents = $this->makeRequest($this->organizationURL);
+        $contents = $this->makeRequest($this->apiURL . 'orgs/wecamp');
         $orgObject = json_decode($contents);
         $org = Organization::createFromObject($orgObject);
 
-        $content = $this->makeRequest($this->organizationURL . '/members?per_page=100');
-        $membersObject = json_decode($content);
+        $contents = $this->makeRequest($this->apiURL . 'orgs/wecamp/members');
+        $membersObject = json_decode($contents);
         $userBag = new UserBag([]);
         foreach ($membersObject as $object)
         {
-            $userBag->add(User::createFromObject($object));
+            $contents = $this->makeRequest($this->apiURL . 'users/' . $object->login);
+            $userObject = json_decode($contents);
+            $userBag->add(User::createFromObject($userObject));
         }
 
-        print_r($userBag);
+        $contents = $this->makeRequest($this->apiURL . 'orgs/wecamp/repos');
+        $repoObject = json_decode($contents);
+        $repoBag = new RepositoryBag([]);
+        foreach ($repoObject as $object)
+        {
+            $repoBag->add(Repository::createFromObject($object));
+        }
+
+        $org->setMembers($userBag);
+        $org->setRepos($repoBag);
+
+        print_r($org);
     }
 
     protected function makeRequest($url)
@@ -42,7 +57,7 @@ class CrawlerController
         }
 
         $client = new \GuzzleHttp\Client();
-        $res = $client->get($url);
+        $res = $client->get($url . '?per_page=100');
 
         $contents = $res->getBody()->getContents();
 
