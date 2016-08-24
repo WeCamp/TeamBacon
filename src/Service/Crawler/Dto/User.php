@@ -1,6 +1,6 @@
 <?php
 
-namespace Bacon\Service\Crawler\Entities;
+namespace Bacon\Service\Crawler\Dto;
 
 class User
 {
