@@ -16,7 +16,7 @@ class Language
     public function __construct($language, $characters)
     {
         $this->setLanguage($language)
-            ->getCharacters($characters);
+            ->setCharacters($characters);
     }
 
     /**
@@ -48,7 +48,7 @@ class Language
     /**
      * @param integer $characters
      */
-    public function setCharacters(integer $characters)
+    public function setCharacters(int $characters)
     {
         $this->characters = $characters;
 
