@@ -17,7 +17,6 @@ class User
     protected $name;
     protected $repos;
     protected $starred = [];
-    protected $subscriptions = [];
     protected $url;
     protected $avatar;
 
@@ -141,14 +140,6 @@ class User
     }
 
     /**
-     * @return array
-     */
-    public function getSubscriptions(): array
-    {
-        return $this->subscriptions;
-    }
-
-    /**
      * @return mixed
      */
     public function getUrl()
@@ -257,16 +248,6 @@ class User
     }
 
     /**
-     * @param array $subscriptions
-     */
-    public function setSubscriptions(array $subscriptions)
-    {
-        $this->subscriptions = $subscriptions;
-
-        return $this;
-    }
-
-    /**
      * @param mixed $url
      */
     public function setUrl($url)
@@ -275,6 +256,4 @@ class User
 
         return $this;
     }
-
-
 }
