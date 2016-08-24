@@ -48,3 +48,8 @@
 Create relation
 
  (Keanu)-[:ACTED_IN {roles:['Neo']}]->(TheMatrixReloaded),
+
+
+Transformer:
+User->login -> User->username
+

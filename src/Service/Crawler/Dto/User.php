@@ -19,6 +19,7 @@ class User
     protected $starred = [];
     protected $subscriptions = [];
     protected $url;
+    protected $avatar;
 
     static public function createFromJson(string $json)
     {
@@ -36,9 +37,27 @@ class User
             ->setLocation($object->location)
             ->setLogin($object->login)
             ->setName($object->name)
-            ->setUrl($object->url);
+            ->setUrl($object->url)
+            ->setAvatar($object->avatar_url)
+        ;
 
         return $user;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAvatar()
+    {
+        return $this->avatar;
+    }
+
+    /**
+     * @param mixed $avatar
+     */
+    public function setAvatar($avatar)
+    {
+        $this->avatar = $avatar;
     }
 
     /**

@@ -15,24 +15,49 @@ class CrawlerController
     protected $useCachedResponses = true;
     protected $cacheDir = __DIR__ . '/../../../../cache/Crawler/';
     protected $apiURL = 'https://api.github.com/';
+    protected $organization = 'wecamp';
 
     public function getData()
     {
-        $contents = $this->makeRequest($this->apiURL . 'orgs/wecamp');
+        $contents = $this->makeRequest($this->apiURL . 'orgs/' . $this->organization);
         $orgObject = json_decode($contents);
         $org = Organization::createFromObject($orgObject);
 
-        $contents = $this->makeRequest($this->apiURL . 'orgs/wecamp/members');
+        $userBag = $this->getUsers($this->organization);
+        $repoBag = $this->getRepos($this->organization);
+
+        $org->setMembers($userBag);
+        $org->setRepos($repoBag);
+
+        return $org;
+    }
+
+    protected function getUsers($organisation)
+    {
+        $contents = $this->makeRequest($this->apiURL . 'orgs/'. $organisation .'/members');
         $membersObject = json_decode($contents);
         $userBag = new UserBag([]);
         foreach ($membersObject as $object)
         {
             $contents = $this->makeRequest($this->apiURL . 'users/' . $object->login);
-            $userObject = json_decode($contents);
-            $userBag->add(User::createFromObject($userObject));
+            $user = User::createFromJson($contents);
+            $contents = $this->makeRequest($this->apiURL . 'users/' . $object->login . '/repos');
+            $repoObject = json_decode($contents);
+            $repoBag = new RepositoryBag([]);
+            foreach ($repoObject as $object)
+            {
+                $repoBag->add(Repository::createFromObject($object));
+            }
+            $user->setRepos($repoBag);
+            $userBag->add($user);
         }
 
-        $contents = $this->makeRequest($this->apiURL . 'orgs/wecamp/repos');
+        return $userBag;
+    }
+
+    protected function getRepos($organisation)
+    {
+        $contents = $this->makeRequest($this->apiURL . 'orgs/' . $organisation . '/repos');
         $repoObject = json_decode($contents);
         $repoBag = new RepositoryBag([]);
         foreach ($repoObject as $object)
@@ -40,10 +65,7 @@ class CrawlerController
             $repoBag->add(Repository::createFromObject($object));
         }
 
-        $org->setMembers($userBag);
-        $org->setRepos($repoBag);
-
-        print_r($org);
+        return $repoBag;
     }
 
     protected function makeRequest($url)
