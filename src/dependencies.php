@@ -3,8 +3,6 @@
 // DIC configuration
 use Bacon\Controllers\UserController;
 
-$controllersFolder = 'src\Controllers\\';
-
 $container = $app->getContainer();
 
 // view renderer
@@ -23,5 +21,5 @@ $container['logger'] = function ($c) {
 };
 
 $container['UserController'] = function ($container) {
-    return new UserController();
+    return new UserController(null);
 };
