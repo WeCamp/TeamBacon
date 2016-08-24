@@ -15,22 +15,16 @@ class CrawlerController
     protected $useCachedResponses = true;
     protected $cacheDir = __DIR__ . '/../../../../cache/Crawler/';
     protected $apiURL = 'https://api.github.com/';
+    protected $organization = 'wecamp';
 
     public function getData()
     {
-        $contents = $this->makeRequest($this->apiURL . 'orgs/wecamp');
+        $contents = $this->makeRequest($this->apiURL . 'orgs/' . $this->organization);
         $orgObject = json_decode($contents);
         $org = Organization::createFromObject($orgObject);
 
-        $userBag = $this->getUsers('wecamp');
-
-        $contents = $this->makeRequest($this->apiURL . 'orgs/wecamp/repos');
-        $repoObject = json_decode($contents);
-        $repoBag = new RepositoryBag([]);
-        foreach ($repoObject as $object)
-        {
-            $repoBag->add(Repository::createFromObject($object));
-        }
+        $userBag = $this->getUsers($this->organization);
+        $repoBag = $this->getRepos($this->organization);
 
         $org->setMembers($userBag);
         $org->setRepos($repoBag);
@@ -59,6 +53,19 @@ class CrawlerController
         }
 
         return $userBag;
+    }
+
+    protected function getRepos($organisation)
+    {
+        $contents = $this->makeRequest($this->apiURL . 'orgs/' . $organisation . '/repos');
+        $repoObject = json_decode($contents);
+        $repoBag = new RepositoryBag([]);
+        foreach ($repoObject as $object)
+        {
+            $repoBag->add(Repository::createFromObject($object));
+        }
+
+        return $repoBag;
     }
 
     protected function makeRequest($url)
