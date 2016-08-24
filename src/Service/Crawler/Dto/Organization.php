@@ -17,6 +17,12 @@ class Organization
     static public function createFromJson(string $json)
     {
         $object = json_decode($json);
+
+        return self::createFromObject($object);
+    }
+
+    static public function createFromObject(\stdClass $object)
+    {
         $organization = new self;
         $organization->setBlog($object->blog)
             ->setDescription($object->description)

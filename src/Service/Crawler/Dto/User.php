@@ -21,6 +21,12 @@ class User
     static public function createFromJson(string $json)
     {
         $object = json_decode($json);
+
+        return self::createFromObject($object);
+    }
+
+    static public function createFromObject(\stdClass $object)
+    {
         $user = new self;
         $user->setBio($object->bio)
             ->setBlog($object->blog)
