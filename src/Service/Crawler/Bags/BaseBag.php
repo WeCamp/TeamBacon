@@ -151,27 +151,27 @@ class BaseBag implements \Iterator
 
     public function rewind()
     {
-        reset($this->var);
+        reset($this->items);
     }
 
     public function current()
     {
-        return current($this->var);
+        return current($this->items);
     }
 
     public function key()
     {
-        return key($this->var);
+        return key($this->items);
     }
 
     public function next()
     {
-        return next($this->item);
+        return next($this->items);
     }
 
     public function valid()
     {
-        $key = key($this->item);
+        $key = key($this->items);
         return ($key !== NULL && $key !== FALSE);
     }
 }

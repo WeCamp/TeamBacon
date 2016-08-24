@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Bacon\Entities;
+namespace Bacon\Entity;
 
 use GraphAware\Neo4j\OGM\Annotations as OGM;
 
