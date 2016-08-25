@@ -36,12 +36,12 @@ class CrawlerController
             $this->cacheDir = isset($config['cacheDir'])? $config['cacheDir'] : __DIR__ . '/../../../../cache/Crawler/';
             $this->apiURL = isset($config['apiURL'])? $config['apiURL'] : 'https://api.github.com/';
             $this->organization = isset($config['organization'])? $config['organization'] : 'wecamp';
-            if (array_key_exists('username', $config['githubCredentials']) && array_key_exists('accessToken', $config['githubCredentials']))
-            {
-                $this->githubCredentials = true;
-                $this->githubUsername = $config['githubCredentials']['username'];
-                $this->githubAccessToken = $config['githubCredentials']['accessToken'];
-            }
+//            if (array_key_exists('username', $config['githubCredentials']) && array_key_exists('accessToken', $config['githubCredentials']))
+//            {
+//                $this->githubCredentials = true;
+//                $this->githubUsername = $config['githubCredentials']['username'];
+//                $this->githubAccessToken = $config['githubCredentials']['accessToken'];
+//            }
         }
     }
 
