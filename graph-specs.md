@@ -49,3 +49,18 @@ Delete all nodes and relations from the repo
     MATCH (n)
     OPTIONAL MATCH (n)-[r]-()
     DELETE n,r
+    
+    
+## Some smaple queries for this graph
+
+list 100 users
+    
+    MATCH (u:User) RETURN u.username LIMIT 100
+    
+    MATCH (u:User {username: "dennisdegreef"})-[:CONTRIBUTES_TO]->(r) RETURN u,r limit 100
+    
+
+
+list  repos of user with username x    
+    MATCH (u:User {username: "mvriel"})-[:CONTRIBUTES_TO]->(r) RETURN u,r limit 100
+    

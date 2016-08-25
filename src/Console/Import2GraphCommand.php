@@ -8,8 +8,7 @@ use Bacon\Config\Config;
 use Bacon\Entity\Repository;
 use Bacon\Repository\Neo4jRepositoryRepository;
 use Bacon\Repository\Neo4jUserRepository;
-use Bacon\Service\Crawler\Bags\RepositoryBag;
-use Bacon\Service\Crawler\Dto\User;
+use Bacon\Service\Crawler\Dto\User as IncomingUser;
 use GraphAware\Neo4j\OGM\EntityManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -58,47 +57,59 @@ class Import2GraphCommand extends Command
 
 
     /**
-     * Fetch WeCamp members from cache or GitHub API
+     * Fetch WeCamp members from cache or GitHub API,
+     * transform and persist them
      *
      * @param OutputInterface $output
      * @return \Bacon\Service\Crawler\Bags\UserBag
      */
     private function handleUsers(OutputInterface $output)
     {
-        $output->writeln('Fetching user details github api.');
+        $output->writeln('Fetching user details.');
 
         $controller = new \Bacon\Service\Crawler\Controllers\CrawlerController();
         $org = $controller->getData();
 
-        //$users = $org->getMembers()->all();
-        $users = $org->getMembers()->getAFew(4);
+        $users = $org->getMembers()->all();
+        //$users = $org->getMembers()->getAFew(4);
 
+        $output->writeln('Found ' . count($users) . ' users.');
         if (! $users) {
             return $output->writeln('No users to import.');
         }
+
         $userRepository = new Neo4jUserRepository($this->em);
+        $repositoryRepository = new Neo4jRepositoryRepository($this->em);
 
-        $existingUserNodes = $userRepository->findAll();
+        // all data is delivered in one big blob
+        foreach ($users as $user) {
+            /** @var  IncomingUser $user */
 
-        // keep only the ones that are not in the graph already
-        $usersToPersist = array_filter($users, function ($user) use ($existingUserNodes) {
-            $userNode = $this->transformDTOUser2GraphUser($user);
-            foreach ($existingUserNodes as $existingUserNode) {
-                return ! $existingUserNode->isEqualTo($userNode);
+            // don't add if user exists
+            if (! $userRepository->findOneBy('username', $user->getLogin())) {
+                $userNode = $this->transformDTOUser2GraphUser($user);
+
+
+                // a users repositories
+                $repos = $user->getRepos()->all();
+                if (count($repos) > 0) {
+                    $output->writeln('User has repos.');
+                    foreach ($repos as $repo) {
+                        $repoNode = $this->transformDTORepo2GraphRepo($repo);
+
+                        // don't add if it exists
+                        if (! $repositoryRepository->findOneBy('repositoryId', $repo->getId())) {
+                            $userNode->contributeToRepository($repoNode);
+                            $repositoryRepository->persist($repoNode);
+                        }
+                    }
+                    $repositoryRepository->flush();
+                }
+
+
+                $userRepository->persist($userNode);
+
             }
-        });
-
-
-        // keep using the DTO User object because it contains more data
-        foreach ($usersToPersist as $user) {
-
-            /** @var  User $user */
-            $userNode = $this->transformDTOUser2GraphUser($user);
-
-            $this->handleUsersRepos($user->getRepos());
-
-            $userRepository->persist($userNode);
-
 
             // todo get Locations from users and repos
             //$user->contributeToRepository($repository1);
@@ -112,22 +123,6 @@ class Import2GraphCommand extends Command
 
     }
 
-    private function handleUsersRepos(RepositoryBag $repoBag)
-    {
-        $repositoryRepository = new Neo4jRepositoryRepository($this->em);
-
-        $repos = $repoBag->all();
-        foreach ($repos as $repo) {
-            $repoNode = $this->transformDTORepo2GraphRepo($repo);
-
-            // don't add if it exists
-            if (!$repositoryRepository->findOneBy('repositoryId', $repo->getId())) {
-                $repositoryRepository->persist($repoNode);
-            }
-        }
-
-        return true;
-    }
 
     private function extractLocationsFromDTOUser(\Bacon\Service\Crawler\Dto\User $user)
     {
@@ -149,11 +144,11 @@ class Import2GraphCommand extends Command
     {
         $node = new Repository();
         $node->setRepositoryId($repository->getId());
-        $node->setName((string) $repository->getName());
-        $node->setDescription((string) $repository->getDescription());
-        $node->setBlog((string) $repository->getBlog());
-        $node->setFullName((string) $repository->getFullName());
-        $node->setUrl((string) $repository->getUrl());
+        $node->setName((string)$repository->getName());
+        $node->setDescription((string)$repository->getDescription());
+        $node->setBlog((string)$repository->getBlog());
+        $node->setFullName((string)$repository->getFullName());
+        $node->setUrl((string)$repository->getUrl());
 
         return $node;
     }
@@ -161,10 +156,10 @@ class Import2GraphCommand extends Command
     /**
      * Trnsforms a DTO User into a Graph Node
      *
-     * @param User $user
+     * @param IncomingUser $user
      * @return \Bacon\Entity\User
      */
-    private function transformDTOUser2GraphUser(User $user)
+    private function transformDTOUser2GraphUser(IncomingUser $user)
     {
         $node = new \Bacon\Entity\User();
 
