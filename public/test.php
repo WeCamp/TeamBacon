@@ -20,6 +20,15 @@ $userRepository = new Neo4jUserRepository($manager);
 $repositoryRepository = new Neo4jRepositoryRepository($manager);
 $locationRepository = new Neo4jLocationRepository($manager);
 
+$user = $userRepository->findOneBy('username', 'aiolos');
+var_dump($user);
+
+$repo = $repositoryRepository->findOneBy('repositoryId', 17855566);
+var_dump($repo);
+
+die;
+
+
 $repository1 = new Repository();
 $repository1->setName('Repository 1');
 
@@ -54,6 +63,12 @@ $language1->setLanguageName('PHP');
 $repository1->useLanguage($language1);
 $languageRepository->persist($language1);
 $repositoryRepository->persist($repository1);
+
+$languageRepository->flush();
+$userRepository->flush();
+$repositoryRepository->flush();
+
+
 
 
 echo 'done';
