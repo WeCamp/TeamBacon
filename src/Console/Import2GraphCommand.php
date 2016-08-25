@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace Bacon\Console;
 
 
+use Bacon\Config\Config;
 use Bacon\Repository\Neo4jRepositoryRepository;
 use Bacon\Repository\Neo4jUserRepository;
 use Bacon\Service\Crawler\Bags\RepositoryBag;
@@ -46,7 +47,7 @@ class Import2GraphCommand extends Command
         ]);
 
 
-        $this->em = EntityManager::create('http://neo4j:1234demo@neo4j:7474');
+        $this->em = EntityManager::create(Config::get()['neo4jHost']);
         if ('user' === $object) {
             $this->handleUsers($output);
         }
