@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Bacon\Service\Crawler\Controllers;
 
 
+use Bacon\Config\Config;
 use Bacon\Service\Crawler\Bags\LanguageBag;
 use Bacon\Service\Crawler\Bags\RepositoryBag;
 use Bacon\Service\Crawler\Bags\UserBag;
@@ -16,12 +17,32 @@ class CrawlerController
 {
     protected $useCachedResponses = true;
     protected $cacheDir;
-    protected $apiURL = 'https://api.github.com/';
-    protected $organization = 'wecamp';
+    protected $apiURL;
+    protected $organization;
+    protected $githubCredentials = false;
+    protected $githubUsername;
+    protected $githubAccessToken;
 
+    /**
+     * Load config for the crawler
+     */
     public function __construct()
     {
-        $this->cacheDir = __DIR__ . '/../../../../cache/Crawler/';
+        $config = Config::get();
+        if (isset($config['githubCrawler']))
+        {
+            $config = $config['githubCrawler'];
+            $this->useCachedResponses = isset($config['useCachedResponses'])? (bool) $config['useCachedResponses'] : true;
+            $this->cacheDir = isset($config['cacheDir'])? $config['cacheDir'] : __DIR__ . '/../../../../cache/Crawler/';
+            $this->apiURL = isset($config['apiURL'])? $config['apiURL'] : 'https://api.github.com/';
+            $this->organization = isset($config['organization'])? $config['organization'] : 'wecamp';
+            if (array_key_exists('username', $config['githubCredentials']) && array_key_exists('accessToken', $config['githubCredentials']))
+            {
+                $this->githubCredentials = true;
+                $this->githubUsername = $config['githubCredentials']['username'];
+                $this->githubAccessToken = $config['githubCredentials']['accessToken'];
+            }
+        }
     }
 
     /**
@@ -203,8 +224,15 @@ class CrawlerController
         // Otherwise makes the request, always trying to get 100 of data when relevent.
         // We can use Basic Authentication here to get more information in the requests and be allowed
         // more requests per hour.
-        // $client = new \GuzzleHttp\Client(['auth' => ['github_username', 'personal_access_token']]);
-        $client = new \GuzzleHttp\Client();
+        if ($this->githubCredentials)
+        {
+            $client = new \GuzzleHttp\Client(['auth' => [$this->githubUsername, $this->githubAccessToken]]);
+        }
+        else
+        {
+            $client = new \GuzzleHttp\Client();
+        }
+
         $res = $client->get($url . '?per_page=100');
 
         $contents = $res->getBody()->getContents();

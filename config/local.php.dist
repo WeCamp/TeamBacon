@@ -1,5 +1,16 @@
 <?php
 
 return [
-    'neo4jHost' => ''
+    'neo4jHost' => 'http://neo4j:neo4jneo4j@neo4j:7474',
+
+    'githubCrawler' => [
+        'cacheDir' => __DIR__ . '/../../../../cache/Crawler/',
+        'useCachedResponses' => true,
+        'apiURL' => 'https://api.github.com/',
+        'organization' => 'wecamp',
+        'githubCredentials' => [
+            'username' => 'github_username',
+            'accessToken' => 'github_personal_access_token',
+        ],
+    ],
 ];
