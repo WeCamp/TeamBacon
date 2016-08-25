@@ -4,19 +4,20 @@ declare(strict_types=1);
 namespace Bacon\Service\Crawler\Dto;
 
 use Bacon\Service\Crawler\Bags\RepositoryBag;
+use Bacon\Service\Crawler\Bags\UserBag;
 
 class User
 {
     protected $bio;
     protected $blog;
     protected $id;
-    protected $followers = [];
-    protected $following = [];
+    protected $followers;
+    protected $following;
     protected $location;
     protected $login;
     protected $name;
     protected $repos;
-    protected $starred = [];
+    protected $starred;
     protected $url;
     protected $avatar;
 
@@ -84,17 +85,17 @@ class User
     }
 
     /**
-     * @return array
+     * @return UserBag
      */
-    public function getFollowers(): array
+    public function getFollowers()
     {
         return $this->followers;
     }
 
     /**
-     * @return array
+     * @return UserBag
      */
-    public function getFollowing(): array
+    public function getFollowing()
     {
         return $this->following;
     }
@@ -132,9 +133,9 @@ class User
     }
 
     /**
-     * @return array
+     * @return RepositoryBag
      */
-    public function getStarred(): array
+    public function getStarred()
     {
         return $this->starred;
     }
@@ -178,9 +179,9 @@ class User
     }
 
     /**
-     * @param array $followers
+     * @param UserBag $followers
      */
-    public function setFollowers(array $followers)
+    public function setFollowers(UserBag $followers)
     {
         $this->followers = $followers;
 
@@ -188,9 +189,9 @@ class User
     }
 
     /**
-     * @param array $following
+     * @param UserBag $following
      */
-    public function setFollowing(array $following)
+    public function setFollowing(UserBag $following)
     {
         $this->following = $following;
 
@@ -238,9 +239,9 @@ class User
     }
 
     /**
-     * @param array $starred
+     * @param RepositoryBag $starred
      */
-    public function setStarred(array $starred)
+    public function setStarred(RepositoryBag $starred)
     {
         $this->starred = $starred;
 
