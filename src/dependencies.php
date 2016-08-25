@@ -25,7 +25,7 @@ $container['Logger'] = function ($c) {
     return $logger;
 };
 
-$container['EntityManager'] = function ($c) {
+$container['EntityManager'] = function ($c) use ($config) {
     return EntityManager::create($config['neo4jHost']);
 };
 
