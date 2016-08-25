@@ -21,9 +21,10 @@ In order to use it you first have to make it executable, like so
 
 You can call it like this: 
 
-    ./scripts/cli bacon:import-github
+    ./scripts/cli bacon:import-github user
 
-It requires a few parameters, see in `src/Console/Import2GraphCommand.php`
+It requires a few parameters, see `src/Console/Import2GraphCommand.php` for the options.
+The command above will import the users.
 
 ## Endpoints
 
