@@ -68,7 +68,4 @@ information given by github only a few of the parameters are present.
 information unless useCachedResponses is set to false.
 * Not all information is available from github without authenticating, and some information may be missing depending
 on the authenticating users access levels. For best results it is best to use Basic Authentication which can be enabled
-in \src\Service\Crawler\Controllers\CrawlerController.php in makeRequest($url)
-    
-### Todo
-* Use config for github credentials and useCachedResponse
+in the config/local.php
