@@ -62,8 +62,7 @@ class Import2GraphCommand extends Command
         $org = $controller->getData();
         $userBag = $org->getMembers();
 
-        var_dump($userBag->first());
-        die;
+        $users = $org->getMembers()->all();
         $graphUsers = [];
 
         foreach ($users as $user) {

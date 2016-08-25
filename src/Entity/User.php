@@ -26,7 +26,7 @@ final class User
      * @OGM\Property(type="string")
      * @var string
      */
-    private $login;
+    private $username;
 
     /**
      * @OGM\Property(type="string")
@@ -38,25 +38,7 @@ final class User
      * @OGM\Property(type="string")
      * @var string
      */
-    private $blog;
-
-    /**
-     * @OGM\Property(type="string")
-     * @var string
-     */
-    private $description;
-
-    /**
-     * @OGM\Property(type="string")
-     * @var string
-     */
-    private $url;
-
-    /**
-     * @OGM\Property(type="string")
-     * @var string
-     */
-    private $location;
+    private $avatar;
 
     /**
      * @return int
@@ -90,21 +72,6 @@ final class User
         $this->name = $name;
     }
 
-    /**
-     * @return string
-     */
-    public function getLogin(): string
-    {
-        return $this->login;
-    }
-
-    /**
-     * @param string $login
-     */
-    public function setLogin(string $login)
-    {
-        $this->login = $login;
-    }
 
     /**
      * @return string
@@ -125,64 +92,33 @@ final class User
     /**
      * @return string
      */
-    public function getBlog(): string
+    public function getUsername(): string
     {
-        return $this->blog;
+        return $this->username;
     }
 
     /**
-     * @param string $blog
+     * @param string $username
      */
-    public function setBlog(string $blog)
+    public function setUsername(string $username)
     {
-        $this->blog = $blog;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription(): string
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param string $description
-     */
-    public function setDescription(string $description)
-    {
-        $this->description = $description;
+        $this->username = $username;
     }
 
     /**
      * @return string
      */
-    public function getUrl(): string
+    public function getAvatar(): string
     {
-        return $this->url;
+        return $this->avatar;
     }
 
     /**
-     * @param string $url
+     * @param string $avatar
      */
-    public function setUrl(string $url)
+    public function setAvatar(string $avatar)
     {
-        $this->url = $url;
+        $this->avatar = $avatar;
     }
 
-    /**
-     * @return string
-     */
-    public function getLocation(): string
-    {
-        return $this->location;
-    }
-
-    /**
-     * @param string $location
-     */
-    public function setLocation(string $location)
-    {
-        $this->location = $location;
-    }
 }
