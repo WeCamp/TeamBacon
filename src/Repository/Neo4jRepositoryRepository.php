@@ -30,6 +30,18 @@ final class Neo4jRepositoryRepository implements RepositoryRepository
     }
 
     /**
+     *
+     *
+     * @param $key
+     * @param $value
+     * @return null|object
+     */
+    public function findOneBy($key, $value)
+    {
+        return $this->entityManager->getRepository(Repository::class)->findOneBy($key, $value);
+    }
+
+    /**
      * @param Repository $user
      */
     public function persist(Repository $user)

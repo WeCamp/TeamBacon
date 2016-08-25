@@ -14,7 +14,6 @@
     * id (unique)
     * etc.
     
-* Team
 * Language
 * Location
 
@@ -36,10 +35,6 @@
 * User : IS_LOCATED_IN -> Location
 * Organisation : IS_LOCATED_IN -> Location
 
-* Team : BELONGS_TO  -> Organisation
-* Team - HAS_ACCESS_TO -> Repository
-    * property: type, values: read, write, read-and-write
-
 * Organisation : OWNS -> Repository
 
 * Repository : USES -> Language
@@ -48,3 +43,9 @@
 ## Useful neo4j / cyher links
 * [http://www.remwebdevelopment.com/blog/sql/some-basic-and-useful-cypher-queries-for-neo4j-201.html]()
 * [https://www.sitepoint.com/discover-graph-databases-neo4j-php/]()
+
+Delete all nodes and relations from the repo
+
+    MATCH (n)
+    OPTIONAL MATCH (n)-[r]-()
+    DELETE n,r

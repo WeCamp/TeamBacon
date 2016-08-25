@@ -199,4 +199,19 @@ class User
         $this->avatar = $avatar;
     }
 
+    /**
+     * Check the unique property in order to prevent creating the ode twice
+     *
+     * @param User $user
+     * @return bool
+     */
+    public function isEqualTo(User $user)
+    {
+        if ($user->getUsername() === $this->getUsername()) {
+            return true;
+        }
+
+        return false;
+    }
+
 }
