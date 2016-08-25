@@ -9,7 +9,7 @@ use Bacon\Repository\Neo4jRepositoryRepository;
 use Bacon\Entity\Repository;
 use GraphAware\Neo4j\OGM\EntityManager;
 
-$manager = EntityManager::create('http://neo4j:neo4jneo4j@192.168.99.100:7474');
+$manager = EntityManager::create(Config::CONFIG['neo4jHost']);
 
 $userRepository = new Neo4jUserRepository($manager);
 $repositoryRepository = new Neo4jRepositoryRepository($manager);
