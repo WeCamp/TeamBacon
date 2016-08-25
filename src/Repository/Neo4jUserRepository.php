@@ -39,7 +39,7 @@ final class Neo4jUserRepository implements UserRepository
      */
     public function findOneBy($key, $value)
     {
-        return $this->entityManager->getRepository(Repository::class)->findOneBy($key, $value);
+        return $this->entityManager->getRepository(User::class)->findOneBy($key, $value);
     }
 
     /**

@@ -38,7 +38,7 @@ final class Neo4jOrganizationRepository implements OrganizationRepository
      */
     public function findOneBy($key, $value)
     {
-        return $this->entityManager->getRepository(Repository::class)->findOneBy($key, $value);
+        return $this->entityManager->getRepository(Organization::class)->findOneBy($key, $value);
     }
 
     /**
@@ -47,6 +47,14 @@ final class Neo4jOrganizationRepository implements OrganizationRepository
     public function persist(Organization $user)
     {
         $this->entityManager->persist($user);
+    }
+
+    /**
+     * Store
+     */
+    public function flush()
+    {
         $this->entityManager->flush();
     }
+
 }

@@ -47,6 +47,14 @@ final class Neo4jRepositoryRepository implements RepositoryRepository
     public function persist(Repository $user)
     {
         $this->entityManager->persist($user);
+    }
+
+    /**
+     * Store
+     */
+    public function flush()
+    {
         $this->entityManager->flush();
     }
+
 }

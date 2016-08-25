@@ -31,6 +31,14 @@ final class Neo4jLocationRepository implements LocationRepository
     public function persist(Location $location)
     {
         $this->entityManager->persist($location);
+    }
+
+    /**
+     * Store
+     */
+    public function flush()
+    {
         $this->entityManager->flush();
     }
+
 }
