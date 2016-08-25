@@ -1,6 +1,5 @@
 <?php
 
-// DIC configuration
 use Bacon\Controllers\UserController;
 use Bacon\Repository\Neo4jOrganizationRepository;
 use Bacon\Repository\Neo4jUserRepository;

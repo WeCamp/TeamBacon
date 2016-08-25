@@ -3,6 +3,7 @@ declare (strict_types = 1);
 
 namespace Bacon\Controllers;
 
+use Bacon\Entity\User;
 use Bacon\Repository\UserRepository;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -19,9 +20,22 @@ final class UserController
 
     public function indexAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
+        /** @var User[] $users */
         $users = $this->userRepository->findAll();
 
+        $userInformation = array_map(
+            function (User $user) {
+                return [
+                    'id' => $user->getId(),
+                    'userName' => $user->getLogin(),
+                    'fullName' => $user->getName(),
+                    'avatar' => $user->getUrl()
+                ];
+            },
+            $users
+        );
+
         return $response->withHeader('Content-type', 'application/json')
-            ->withJson($users, 200);
+            ->withJson($userInformation, 200);
     }
 }
