@@ -35,6 +35,13 @@ final class Neo4jUserRepository implements UserRepository
     public function persist(User $user)
     {
         $this->entityManager->persist($user);
+    }
+
+    /**
+     * Store
+     */
+    public function flush()
+    {
         $this->entityManager->flush();
     }
 }
