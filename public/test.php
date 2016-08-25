@@ -10,7 +10,7 @@ use Bacon\Repository\Neo4jRepositoryRepository;
 use Bacon\Entity\Repository;
 use GraphAware\Neo4j\OGM\EntityManager;
 
-$manager = EntityManager::create(Config::CONFIG['neo4jHost']);
+$manager = EntityManager::create(Config::get()['neo4jHost']);
 
 $userRepository = new Neo4jUserRepository($manager);
 $repositoryRepository = new Neo4jRepositoryRepository($manager);
@@ -23,6 +23,8 @@ $repository2->setName('Repository 2');
 
 $user = new User();
 $user->setName('User 1');
+$user->setUsername('User name');
+$user->setAvatar('Avatar');
 
 $user->contributeToRepository($repository1);
 $user->watchRepository($repository1);

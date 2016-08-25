@@ -8,7 +8,7 @@ use GraphAware\Neo4j\OGM\Annotations as OGM;
 /**
  * @OGM\Node(label="Organization")
  */
-final class Organization
+class Organization
 {
     /**
      * @OGM\GraphId()
