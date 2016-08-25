@@ -73,9 +73,19 @@ class BaseBag implements \Iterator
     }
 
     /**
+     * Get a limited amount of items
+     *
+     * @param $limit
+     * @return array
+     */
+    public function getAFew($limit)
+    {
+        return array_slice($this->items, 0, $limit);
+    }
+
+    /**
      * Get the first message from the bag.
      *
-     * @param  string  $key
      * @return string
      */
     public function first()
@@ -96,7 +106,7 @@ class BaseBag implements \Iterator
             return $this->items[$key];
         }
 
-        return false;
+        return [];
     }
 
     /**
