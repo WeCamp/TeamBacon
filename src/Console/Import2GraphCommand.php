@@ -4,7 +4,11 @@ declare(strict_types = 1);
 namespace Bacon\Console;
 
 
+use Bacon\Repository\Neo4jRepositoryRepository;
+use Bacon\Repository\Neo4jUserRepository;
+use Bacon\Service\Crawler\Bags\RepositoryBag;
 use Bacon\Service\Crawler\Dto\User;
+use GraphAware\Neo4j\OGM\EntityManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -18,6 +22,9 @@ use Symfony\Component\Console\Input\InputOption;
  */
 class Import2GraphCommand extends Command
 {
+
+    private $em;
+
     protected function configure()
     {
         $this
@@ -39,6 +46,7 @@ class Import2GraphCommand extends Command
         ]);
 
 
+        $this->em = EntityManager::create('http://neo4j:1234demo@neo4j:7474');
         if ('user' === $object) {
             $this->handleUsers($output);
         }
@@ -60,27 +68,58 @@ class Import2GraphCommand extends Command
 
         $controller = new \Bacon\Service\Crawler\Controllers\CrawlerController();
         $org = $controller->getData();
-        $userBag = $org->getMembers();
 
         $users = $org->getMembers()->all();
-        $graphUsers = [];
+
+        if (!$users) {
+            return $output->writeln('No users to import.');
+        }
+        $userRepository = new Neo4jUserRepository($this->em);
+        $repositoryRepository = new Neo4jRepositoryRepository($this->em);
 
         foreach ($users as $user) {
-            $graphUsers[] = $this->transformUser($user);
+            /** @var  User $user */
+            $userNode = $this->transformUser($user);
+
+            $usersRepos = $this->transformUsersRepos($user->getRepos());
+            // persist the user
+
+
+            $userRepository->persist($userNode);
+
+            //$user->contributeToRepository($repository1);
+            // transform  user repositories
+
+
+            // persist repos
+
+            // create relation between users and repos
         }
+
+        $userRepository->flush();
+
+    }
+
+    private function transformUsersRepos(RepositoryBag $repoBag)
+    {
+
     }
 
     /**
      * Trnsforms a DTO User into a Graph Node
      *
      * @param User $user
+     * @return \Bacon\Entity\User
      */
     private function transformUser(User $user)
     {
         $node = new \Bacon\Entity\User();
-        // User->login -> User->username
 
-        $node->setName($user->getName());
-        var_dump($node);
+        $node->setName((string) $user->getName());
+        $node->setUsername((string) $user->getLogin());
+        $node->setAvatar((string) $user->getUrl());
+        $node->setBio((string) $user->getBio());
+
+        return $node;
     }
 }
