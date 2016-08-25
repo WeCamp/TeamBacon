@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 require_once '../vendor/autoload.php';
 
+use Bacon\Config\Config;
 use Bacon\Repository\Neo4jUserRepository;
 use Bacon\Entity\User;
 use Bacon\Repository\Neo4jRepositoryRepository;

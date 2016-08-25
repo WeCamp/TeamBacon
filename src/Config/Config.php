@@ -1,6 +1,8 @@
 <?php
 declare (strict_types = 1);
 
+namespace Bacon\Config;
+
 final class Config
 {
     const CONFIG = [

@@ -20,6 +20,8 @@ $app = new \Slim\App($settings);
 
 $container = $app->getContainer();
 
+require __DIR__ . '/../src/Config/Config.php';
+
 // Set up dependencies
 require __DIR__ . '/../src/dependencies.php';
 
