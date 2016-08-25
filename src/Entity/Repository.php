@@ -9,7 +9,7 @@ use GraphAware\Neo4j\OGM\Annotations as OGM;
 /**
  * @OGM\Node(label="Repository")
  */
-final class Repository
+class Repository
 {
     /**
      * @OGM\GraphId()
@@ -54,19 +54,19 @@ final class Repository
     private $location;
 
     /**
-     * @OGM\Relationship(type="CONTRIBUTES_TO", direction="OUTGOING", targetEntity="Bacon\Entity\User", collection=true)
+     * @OGM\Relationship(type="CONTRIBUTES_TO", direction="OUTGOING", targetEntity="Bacon\Entity\User", collection=true, mappedBy="repositoriesContributesTo")
      * @var ArrayCollection|User[]
      */
     private $usersContributeToRepository;
 
     /**
-     * @OGM\Relationship(type="WATCHES", direction="OUTGOING", targetEntity="Bacon\Entity\User", collection=true)
+     * @OGM\Relationship(type="WATCHES", direction="OUTGOING", targetEntity="Bacon\Entity\User", collection=true, mappedBy="repositoriesWatches")
      * @var ArrayCollection|User[]
      */
     private $usersWatchRepository;
 
     /**
-     * @OGM\Relationship(type="STARS", direction="OUTGOING", targetEntity="Bacon\Entity\User", collection=true)
+     * @OGM\Relationship(type="STARS", direction="OUTGOING", targetEntity="Bacon\Entity\User", collection=true, mappedBy="repositoriesStars")
      * @var ArrayCollection|User[]
      */
     private $usersStarRepository;

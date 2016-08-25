@@ -6,6 +6,8 @@ use Bacon\Repository\Neo4jOrganizationRepository;
 use Bacon\Repository\Neo4jUserRepository;
 use GraphAware\Neo4j\OGM\EntityManager;
 
+$config = Config::get();
+
 $container = $app->getContainer();
 
 // view renderer
@@ -23,8 +25,8 @@ $container['Logger'] = function ($c) {
     return $logger;
 };
 
-$container['EntityManager'] = function ($c) {
-    return EntityManager::create(Config::CONFIG['neo4jHost']);
+$container['EntityManager'] = function ($c) use ($config) {
+    return EntityManager::create($config['neo4jHost']);
 };
 
 $container['Neo4jOrganisationRepository'] = function ($c) {
