@@ -1,0 +1,40 @@
+[
+  {
+    "login": "lizwarner",
+    "id": 1080330,
+    "avatar_url": "https://avatars.githubusercontent.com/u/1080330?v=3",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/lizwarner",
+    "html_url": "https://github.com/lizwarner",
+    "followers_url": "https://api.github.com/users/lizwarner/followers",
+    "following_url": "https://api.github.com/users/lizwarner/following{/other_user}",
+    "gists_url": "https://api.github.com/users/lizwarner/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/lizwarner/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/lizwarner/subscriptions",
+    "organizations_url": "https://api.github.com/users/lizwarner/orgs",
+    "repos_url": "https://api.github.com/users/lizwarner/repos",
+    "events_url": "https://api.github.com/users/lizwarner/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/lizwarner/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  {
+    "login": "samlambert",
+    "id": 1155781,
+    "avatar_url": "https://avatars.githubusercontent.com/u/1155781?v=3",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/samlambert",
+    "html_url": "https://github.com/samlambert",
+    "followers_url": "https://api.github.com/users/samlambert/followers",
+    "following_url": "https://api.github.com/users/samlambert/following{/other_user}",
+    "gists_url": "https://api.github.com/users/samlambert/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/samlambert/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/samlambert/subscriptions",
+    "organizations_url": "https://api.github.com/users/samlambert/orgs",
+    "repos_url": "https://api.github.com/users/samlambert/repos",
+    "events_url": "https://api.github.com/users/samlambert/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/samlambert/received_events",
+    "type": "User",
+    "site_admin": true
+  }
+]

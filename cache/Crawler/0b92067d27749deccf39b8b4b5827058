@@ -1,0 +1,21 @@
+[
+  {
+    "login": "allert",
+    "id": 1098075,
+    "avatar_url": "https://avatars.githubusercontent.com/u/1098075?v=3",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/allert",
+    "html_url": "https://github.com/allert",
+    "followers_url": "https://api.github.com/users/allert/followers",
+    "following_url": "https://api.github.com/users/allert/following{/other_user}",
+    "gists_url": "https://api.github.com/users/allert/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/allert/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/allert/subscriptions",
+    "organizations_url": "https://api.github.com/users/allert/orgs",
+    "repos_url": "https://api.github.com/users/allert/repos",
+    "events_url": "https://api.github.com/users/allert/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/allert/received_events",
+    "type": "User",
+    "site_admin": false
+  }
+]

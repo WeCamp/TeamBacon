@@ -1,0 +1,40 @@
+[
+  {
+    "login": "berthausmans",
+    "id": 345440,
+    "avatar_url": "https://avatars.githubusercontent.com/u/345440?v=3",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/berthausmans",
+    "html_url": "https://github.com/berthausmans",
+    "followers_url": "https://api.github.com/users/berthausmans/followers",
+    "following_url": "https://api.github.com/users/berthausmans/following{/other_user}",
+    "gists_url": "https://api.github.com/users/berthausmans/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/berthausmans/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/berthausmans/subscriptions",
+    "organizations_url": "https://api.github.com/users/berthausmans/orgs",
+    "repos_url": "https://api.github.com/users/berthausmans/repos",
+    "events_url": "https://api.github.com/users/berthausmans/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/berthausmans/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  {
+    "login": "framakers",
+    "id": 5259261,
+    "avatar_url": "https://avatars.githubusercontent.com/u/5259261?v=3",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/framakers",
+    "html_url": "https://github.com/framakers",
+    "followers_url": "https://api.github.com/users/framakers/followers",
+    "following_url": "https://api.github.com/users/framakers/following{/other_user}",
+    "gists_url": "https://api.github.com/users/framakers/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/framakers/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/framakers/subscriptions",
+    "organizations_url": "https://api.github.com/users/framakers/orgs",
+    "repos_url": "https://api.github.com/users/framakers/repos",
+    "events_url": "https://api.github.com/users/framakers/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/framakers/received_events",
+    "type": "User",
+    "site_admin": false
+  }
+]

@@ -1,0 +1,21 @@
+[
+  {
+    "login": "BinaryKitten",
+    "id": 67553,
+    "avatar_url": "https://avatars.githubusercontent.com/u/67553?v=3",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/BinaryKitten",
+    "html_url": "https://github.com/BinaryKitten",
+    "followers_url": "https://api.github.com/users/BinaryKitten/followers",
+    "following_url": "https://api.github.com/users/BinaryKitten/following{/other_user}",
+    "gists_url": "https://api.github.com/users/BinaryKitten/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/BinaryKitten/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/BinaryKitten/subscriptions",
+    "organizations_url": "https://api.github.com/users/BinaryKitten/orgs",
+    "repos_url": "https://api.github.com/users/BinaryKitten/repos",
+    "events_url": "https://api.github.com/users/BinaryKitten/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/BinaryKitten/received_events",
+    "type": "User",
+    "site_admin": false
+  }
+]

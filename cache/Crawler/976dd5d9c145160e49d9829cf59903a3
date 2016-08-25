@@ -1,0 +1,21 @@
+[
+  {
+    "login": "Techbot",
+    "id": 548643,
+    "avatar_url": "https://avatars.githubusercontent.com/u/548643?v=3",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/Techbot",
+    "html_url": "https://github.com/Techbot",
+    "followers_url": "https://api.github.com/users/Techbot/followers",
+    "following_url": "https://api.github.com/users/Techbot/following{/other_user}",
+    "gists_url": "https://api.github.com/users/Techbot/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/Techbot/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/Techbot/subscriptions",
+    "organizations_url": "https://api.github.com/users/Techbot/orgs",
+    "repos_url": "https://api.github.com/users/Techbot/repos",
+    "events_url": "https://api.github.com/users/Techbot/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/Techbot/received_events",
+    "type": "User",
+    "site_admin": false
+  }
+]
