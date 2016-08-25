@@ -16,6 +16,7 @@
     
 * Team
 * Language
+* Location
 
 
 ##Relationships
@@ -32,6 +33,8 @@
 
 * Repository : IS_FORK_OF -> Repository
 
+* User : IS_LOCATED_IN -> Location
+* Organisation : IS_LOCATED_IN -> Location
 
 * Team : BELONGS_TO  -> Organisation
 * Team - HAS_ACCESS_TO -> Repository
