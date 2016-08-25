@@ -79,14 +79,14 @@ class CrawlerController
         foreach ($repoObject as $object)
         {
             $repo = Repository::createFromObject($object);
-//            $contents = $this->makeRequest($this->apiURL . 'repos/' . $organisation . '/' . $repo->getName() . '/languages');
-//            $languageArray = json_decode($contents);
-//            $languageBag = new LanguageBag([]);
-//            foreach ($languageArray as $language => $characters)
-//            {
-//                $languageBag->add(new Language($language, $characters));
-//            }
-//            $repo->setLang($languageBag);
+            $contents = $this->makeRequest($this->apiURL . 'repos/' . $organisation . '/' . $repo->getName() . '/languages');
+            $languageArray = json_decode($contents);
+            $languageBag = new LanguageBag([]);
+            foreach ($languageArray as $language => $characters)
+            {
+                $languageBag->add(new Language($language, $characters));
+            }
+            $repo->setLang($languageBag);
             $repoBag->add($repo);
         }
 
