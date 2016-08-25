@@ -71,11 +71,28 @@ class Repository
      */
     private $usersStarRepository;
 
+    /**
+     * @OGM\Relationship(type="USES", direction="OUTGOING", targetEntity="Bacon\Entity\Language", collection=true, mappedBy="repositoriesUsingLanguages")
+     * @var ArrayCollection|Repository[]
+     */
+    private $languagesBelongsToRepository;
+
+    /**
+     * @param Language $language
+     */
+    public function useLanguage(Language $language)
+    {
+        if (!$this->languagesBelongsToRepository->contains($language)) {
+            $this->languagesBelongsToRepository->add($language);
+        }
+    }
+
     public function __construct()
     {
         $this->usersContributeToRepository = new ArrayCollection();
         $this->usersWatchRepository = new ArrayCollection();
         $this->usersStarRepository = new ArrayCollection();
+        $this->languagesBelongsToRepository = new ArrayCollection();
     }
 
     /**

@@ -4,6 +4,8 @@ declare(strict_types=1);
 require_once '../vendor/autoload.php';
 
 use Bacon\Config\Config;
+use Bacon\Entity\Language;
+use Bacon\Repository\Neo4jLanguageRepository;
 use Bacon\Repository\Neo4jUserRepository;
 use Bacon\Entity\User;
 use Bacon\Repository\Neo4jRepositoryRepository;
@@ -34,5 +36,14 @@ $user->watchRepository($repository2);
 
 $userRepository->persist($user);
 $repositoryRepository->persist($repository1);
+
+$languageRepository = new Neo4jLanguageRepository($manager);
+
+$language1 = new Language();
+$language1->setLanguageName('PHP');
+
+$repository1->useLanguage($language1);
+$languageRepository->persist($language1);
+
 
 echo 'done';
