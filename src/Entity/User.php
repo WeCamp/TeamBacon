@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Bacon\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use GraphAware\Neo4j\OGM\Annotations as OGM;
 
 /**
@@ -39,6 +40,61 @@ final class User
      * @var string
      */
     private $avatar;
+
+    /**
+     * @OGM\Relationship(type="CONTRIBUTES_TO", direction="OUTGOING", targetEntity="Bacon\Entity\Repository", collection=true, mappedBy="usersContributeToRepository")
+     * @var ArrayCollection|Repository[]
+     */
+    private $repositoriesContributesTo;
+
+    /**
+     * @OGM\Relationship(type="WATCHES", direction="OUTGOING", targetEntity="Bacon\Entity\Repository", collection=true, mappedBy="usersWatchRepository")
+     * @var ArrayCollection|Repository[]
+     */
+    private $repositoriesWatches;
+
+    /**
+     * @OGM\Relationship(type="STARS", direction="OUTGOING", targetEntity="Bacon\Entity\Repository", collection=true, mappedBy="usersStarRepository")
+     * @var ArrayCollection|Repository[]
+     */
+    private $repositoriesStars;
+
+    public function __construct()
+    {
+        $this->repositoriesContributesTo = new ArrayCollection();
+        $this->repositoriesWatches = new ArrayCollection();
+        $this->repositoriesStars = new ArrayCollection();
+    }
+
+    /**
+     * @param Repository $repository
+     */
+    public function contributeToRepository(Repository $repository)
+    {
+        if (!$this->repositoriesContributesTo->contains($repository)) {
+            $this->repositoriesContributesTo->add($repository);
+        }
+    }
+
+    /**
+     * @param Repository $repository
+     */
+    public function watchRepository(Repository $repository)
+    {
+        if (!$this->repositoriesWatches->contains($repository)) {
+            $this->repositoriesWatches->add($repository);
+        }
+    }
+
+    /**
+     * @param Repository $repository
+     */
+    public function starRepository(Repository $repository)
+    {
+        if (!$this->repositoriesStars->contains($repository)) {
+            $this->repositoriesStars->add($repository);
+        }
+    }
 
     /**
      * @return int

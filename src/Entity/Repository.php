@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Bacon\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use GraphAware\Neo4j\OGM\Annotations as OGM;
 
 /**
@@ -51,6 +52,31 @@ final class Repository
      * @var string
      */
     private $location;
+
+    /**
+     * @OGM\Relationship(type="CONTRIBUTES_TO", direction="OUTGOING", targetEntity="Bacon\Entity\User", collection=true)
+     * @var ArrayCollection|User[]
+     */
+    private $usersContributeToRepository;
+
+    /**
+     * @OGM\Relationship(type="WATCHES", direction="OUTGOING", targetEntity="Bacon\Entity\User", collection=true)
+     * @var ArrayCollection|User[]
+     */
+    private $usersWatchRepository;
+
+    /**
+     * @OGM\Relationship(type="STARS", direction="OUTGOING", targetEntity="Bacon\Entity\User", collection=true)
+     * @var ArrayCollection|User[]
+     */
+    private $usersStarRepository;
+
+    public function __construct()
+    {
+        $this->usersContributeToRepository = new ArrayCollection();
+        $this->usersWatchRepository = new ArrayCollection();
+        $this->usersStarRepository = new ArrayCollection();
+    }
 
     /**
      * @return int
