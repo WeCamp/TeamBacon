@@ -1,3 +1,3 @@
 <?php
 
-$app->get('/hello', 'UserController:indexAction');
+$app->get('/api/users', 'UserController:indexAction');
