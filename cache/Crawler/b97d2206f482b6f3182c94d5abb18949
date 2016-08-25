@@ -1,0 +1,15 @@
+{
+  "PHP": 1390299,
+  "Hack": 97604,
+  "JavaScript": 93317,
+  "CSS": 78681,
+  "HTML": 41543,
+  "C++": 17860,
+  "Smarty": 14655,
+  "Shell": 9853,
+  "Clean": 6801,
+  "Groff": 2099,
+  "Makefile": 959,
+  "Awk": 515,
+  "QMake": 51
+}

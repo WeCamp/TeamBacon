@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Bacon\Service\Crawler\Bags;
 
 
-class BaseBag implements Iterator
+class BaseBag implements \Iterator
 {
     protected $items = [];
 
@@ -25,10 +25,10 @@ class BaseBag implements Iterator
      * @param  string  $message
      * @return $this
      */
-    public function add($key, $item)
+    public function add($item)
     {
-        if ($this->isUnique($key, $item)) {
-            $this->items[$key] = $item;
+        if ($this->isUnique($item)) {
+            $this->items[] = $item;
         }
         return $this;
     }
@@ -40,10 +40,9 @@ class BaseBag implements Iterator
      * @param  string  $message
      * @return bool
      */
-    protected function isUnique($key, $item)
+    protected function isUnique($item)
     {
-        $items = (array) $this->items;
-        return ! isset($items[$key]) || ! in_array($item, $items[$key]);
+        return !in_array($item, $this->items);
     }
 
     /**
@@ -152,27 +151,27 @@ class BaseBag implements Iterator
 
     public function rewind()
     {
-        reset($this->var);
+        reset($this->items);
     }
 
     public function current()
     {
-        return current($this->var);
+        return current($this->items);
     }
 
     public function key()
     {
-        return key($this->var);
+        return key($this->items);
     }
 
     public function next()
     {
-        return next($this->item);
+        return next($this->items);
     }
 
     public function valid()
     {
-        $key = key($this->item);
+        $key = key($this->items);
         return ($key !== NULL && $key !== FALSE);
     }
 }

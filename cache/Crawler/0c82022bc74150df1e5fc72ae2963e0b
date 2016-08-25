@@ -1,0 +1,40 @@
+[
+  {
+    "login": "DannyvdSluijs",
+    "id": 618940,
+    "avatar_url": "https://avatars.githubusercontent.com/u/618940?v=3",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/DannyvdSluijs",
+    "html_url": "https://github.com/DannyvdSluijs",
+    "followers_url": "https://api.github.com/users/DannyvdSluijs/followers",
+    "following_url": "https://api.github.com/users/DannyvdSluijs/following{/other_user}",
+    "gists_url": "https://api.github.com/users/DannyvdSluijs/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/DannyvdSluijs/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/DannyvdSluijs/subscriptions",
+    "organizations_url": "https://api.github.com/users/DannyvdSluijs/orgs",
+    "repos_url": "https://api.github.com/users/DannyvdSluijs/repos",
+    "events_url": "https://api.github.com/users/DannyvdSluijs/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/DannyvdSluijs/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  {
+    "login": "diewom",
+    "id": 10495214,
+    "avatar_url": "https://avatars.githubusercontent.com/u/10495214?v=3",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/diewom",
+    "html_url": "https://github.com/diewom",
+    "followers_url": "https://api.github.com/users/diewom/followers",
+    "following_url": "https://api.github.com/users/diewom/following{/other_user}",
+    "gists_url": "https://api.github.com/users/diewom/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/diewom/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/diewom/subscriptions",
+    "organizations_url": "https://api.github.com/users/diewom/orgs",
+    "repos_url": "https://api.github.com/users/diewom/repos",
+    "events_url": "https://api.github.com/users/diewom/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/diewom/received_events",
+    "type": "User",
+    "site_admin": false
+  }
+]

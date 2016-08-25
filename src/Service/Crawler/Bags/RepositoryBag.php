@@ -6,7 +6,7 @@ namespace Bacon\Service\Crawler\Bags;
 
 use Bacon\Service\Crawler\Dto\Repository;
 
-class UserBag extends BaseBag
+class RepositoryBag extends BaseBag
 {
     public function __construct(array $items)
     {
@@ -20,13 +20,13 @@ class UserBag extends BaseBag
         }
     }
 
-    public function add($key, $item)
+    public function add($item)
     {
         if (!$item instanceof Repository)
         {
             throw new \Exception('Only Repository objects can be added to the RepositoryBag');
         }
 
-        return parent::add($key, $item);
+        return parent::add($item);
     }
 }

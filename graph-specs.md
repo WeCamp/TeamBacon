@@ -15,8 +15,8 @@
     * etc.
     
 * Team
-* Tag
 * Language
+* Location
 
 
 ##Relationships
@@ -33,6 +33,8 @@
 
 * Repository : IS_FORK_OF -> Repository
 
+* User : IS_LOCATED_IN -> Location
+* Organisation : IS_LOCATED_IN -> Location
 
 * Team : BELONGS_TO  -> Organisation
 * Team - HAS_ACCESS_TO -> Repository
@@ -40,11 +42,9 @@
 
 * Organisation : OWNS -> Repository
 
-    
-* Tag
-* Language
+* Repository : USES -> Language
 
 
-Create relation
-
- (Keanu)-[:ACTED_IN {roles:['Neo']}]->(TheMatrixReloaded),
+## Useful neo4j / cyher links
+* [http://www.remwebdevelopment.com/blog/sql/some-basic-and-useful-cypher-queries-for-neo4j-201.html]()
+* [https://www.sitepoint.com/discover-graph-databases-neo4j-php/]()

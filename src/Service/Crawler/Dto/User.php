@@ -3,24 +3,33 @@ declare(strict_types=1);
 
 namespace Bacon\Service\Crawler\Dto;
 
+use Bacon\Service\Crawler\Bags\RepositoryBag;
+use Bacon\Service\Crawler\Bags\UserBag;
+
 class User
 {
     protected $bio;
     protected $blog;
     protected $id;
-    protected $followers = [];
-    protected $following = [];
+    protected $followers;
+    protected $following;
     protected $location;
     protected $login;
     protected $name;
-    protected $repos = [];
-    protected $starred = [];
-    protected $subscriptions = [];
+    protected $repos;
+    protected $starred;
     protected $url;
+    protected $avatar;
 
     static public function createFromJson(string $json)
     {
         $object = json_decode($json);
+
+        return self::createFromObject($object);
+    }
+
+    static public function createFromObject(\stdClass $object)
+    {
         $user = new self;
         $user->setBio($object->bio)
             ->setBlog($object->blog)
@@ -28,9 +37,27 @@ class User
             ->setLocation($object->location)
             ->setLogin($object->login)
             ->setName($object->name)
-            ->setUrl($object->url);
+            ->setUrl($object->url)
+            ->setAvatar($object->avatar_url)
+        ;
 
         return $user;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAvatar()
+    {
+        return $this->avatar;
+    }
+
+    /**
+     * @param mixed $avatar
+     */
+    public function setAvatar($avatar)
+    {
+        $this->avatar = $avatar;
     }
 
     /**
@@ -58,17 +85,17 @@ class User
     }
 
     /**
-     * @return array
+     * @return UserBag
      */
-    public function getFollowers(): array
+    public function getFollowers()
     {
         return $this->followers;
     }
 
     /**
-     * @return array
+     * @return UserBag
      */
-    public function getFollowing(): array
+    public function getFollowing()
     {
         return $this->following;
     }
@@ -98,27 +125,19 @@ class User
     }
 
     /**
-     * @return array
+     * @return RepositoryBag
      */
-    public function getRepos(): array
+    public function getRepos()
     {
         return $this->repos;
     }
 
     /**
-     * @return array
+     * @return RepositoryBag
      */
-    public function getStarred(): array
+    public function getStarred()
     {
         return $this->starred;
-    }
-
-    /**
-     * @return array
-     */
-    public function getSubscriptions(): array
-    {
-        return $this->subscriptions;
     }
 
     /**
@@ -160,9 +179,9 @@ class User
     }
 
     /**
-     * @param array $followers
+     * @param UserBag $followers
      */
-    public function setFollowers(array $followers)
+    public function setFollowers(UserBag $followers)
     {
         $this->followers = $followers;
 
@@ -170,9 +189,9 @@ class User
     }
 
     /**
-     * @param array $following
+     * @param UserBag $following
      */
-    public function setFollowing(array $following)
+    public function setFollowing(UserBag $following)
     {
         $this->following = $following;
 
@@ -210,9 +229,9 @@ class User
     }
 
     /**
-     * @param array $repos
+     * @param RepositoryBag $repos
      */
-    public function setRepos(array $repos)
+    public function setRepos(RepositoryBag $repos)
     {
         $this->repos = $repos;
 
@@ -220,21 +239,11 @@ class User
     }
 
     /**
-     * @param array $starred
+     * @param RepositoryBag $starred
      */
-    public function setStarred(array $starred)
+    public function setStarred(RepositoryBag $starred)
     {
         $this->starred = $starred;
-
-        return $this;
-    }
-
-    /**
-     * @param array $subscriptions
-     */
-    public function setSubscriptions(array $subscriptions)
-    {
-        $this->subscriptions = $subscriptions;
 
         return $this;
     }
@@ -248,6 +257,4 @@ class User
 
         return $this;
     }
-
-
 }

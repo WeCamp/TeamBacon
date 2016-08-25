@@ -1,0 +1,21 @@
+[
+  {
+    "login": "dstogov",
+    "id": 2510034,
+    "avatar_url": "https://avatars.githubusercontent.com/u/2510034?v=3",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/dstogov",
+    "html_url": "https://github.com/dstogov",
+    "followers_url": "https://api.github.com/users/dstogov/followers",
+    "following_url": "https://api.github.com/users/dstogov/following{/other_user}",
+    "gists_url": "https://api.github.com/users/dstogov/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/dstogov/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/dstogov/subscriptions",
+    "organizations_url": "https://api.github.com/users/dstogov/orgs",
+    "repos_url": "https://api.github.com/users/dstogov/repos",
+    "events_url": "https://api.github.com/users/dstogov/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/dstogov/received_events",
+    "type": "User",
+    "site_admin": false
+  }
+]

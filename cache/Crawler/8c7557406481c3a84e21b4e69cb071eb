@@ -1,0 +1,40 @@
+[
+  {
+    "login": "martyn82",
+    "id": 436726,
+    "avatar_url": "https://avatars.githubusercontent.com/u/436726?v=3",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/martyn82",
+    "html_url": "https://github.com/martyn82",
+    "followers_url": "https://api.github.com/users/martyn82/followers",
+    "following_url": "https://api.github.com/users/martyn82/following{/other_user}",
+    "gists_url": "https://api.github.com/users/martyn82/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/martyn82/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/martyn82/subscriptions",
+    "organizations_url": "https://api.github.com/users/martyn82/orgs",
+    "repos_url": "https://api.github.com/users/martyn82/repos",
+    "events_url": "https://api.github.com/users/martyn82/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/martyn82/received_events",
+    "type": "User",
+    "site_admin": false
+  },
+  {
+    "login": "eugef",
+    "id": 895071,
+    "avatar_url": "https://avatars.githubusercontent.com/u/895071?v=3",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/eugef",
+    "html_url": "https://github.com/eugef",
+    "followers_url": "https://api.github.com/users/eugef/followers",
+    "following_url": "https://api.github.com/users/eugef/following{/other_user}",
+    "gists_url": "https://api.github.com/users/eugef/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/eugef/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/eugef/subscriptions",
+    "organizations_url": "https://api.github.com/users/eugef/orgs",
+    "repos_url": "https://api.github.com/users/eugef/repos",
+    "events_url": "https://api.github.com/users/eugef/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/eugef/received_events",
+    "type": "User",
+    "site_admin": false
+  }
+]

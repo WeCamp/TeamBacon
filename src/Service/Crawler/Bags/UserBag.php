@@ -27,13 +27,13 @@ class UserBag extends BaseBag
      * @param  string  $message
      * @return $this
      */
-    public function add($key, $item)
+    public function add($item)
     {
         if (!$item instanceof User)
         {
             throw new \Exception('Only User objects can be added to the UserBag');
         }
 
-        return parent::add($key, $item);
+        return parent::add($item);
     }
 }

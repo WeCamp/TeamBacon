@@ -1,0 +1,16 @@
+{
+  "C": 555427367,
+  "C++": 11537672,
+  "Assembly": 10287935,
+  "Makefile": 1571752,
+  "Perl": 789579,
+  "Objective-C": 639706,
+  "Python": 224990,
+  "Shell": 183922,
+  "Yacc": 82466,
+  "Lex": 43116,
+  "Awk": 19891,
+  "GDB": 18113,
+  "UnrealScript": 12824,
+  "SourcePawn": 2711
+}

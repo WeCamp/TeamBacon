@@ -3,28 +3,32 @@ declare(strict_types=1);
 
 namespace Bacon\Service\Crawler\Dto;
 
+use Bacon\Service\Crawler\Bags\LanguageBag;
+
 class Repository
 {
     protected $blog;
     protected $description;
     protected $fullName;
     protected $id;
-    protected $lang = [];
-    protected $location;
+    protected $lang;
     protected $name;
-    protected $tags = [];
     protected $url;
-
 
     static public function createFromJson(string $json)
     {
         $object = json_decode($json);
+
+        return self::createFromObject($object);
+    }
+
+    static public function createFromObject(\stdClass $object)
+    {
         $organization = new self;
         $organization->setBlog($object->blog)
             ->setDescription($object->description)
-            ->setFullName($object->fullName)
+            ->setFullName($object->full_name)
             ->setId($object->id)
-            ->setLocation($object->location)
             ->setName($object->name)
             ->setUrl($object->url);
 
@@ -64,19 +68,11 @@ class Repository
     }
 
     /**
-     * @return array
+     * @return LanguageBag
      */
-    public function getLang(): array
+    public function getLang()
     {
         return $this->lang;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLocation()
-    {
-        return $this->location;
     }
 
     /**
@@ -85,14 +81,6 @@ class Repository
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * @return array
-     */
-    public function getTags(): array
-    {
-        return $this->tags;
     }
 
     /**
@@ -144,21 +132,11 @@ class Repository
     }
 
     /**
-     * @param array $lang
+     * @param LanguageBag $lang
      */
-    public function setLang(array $lang)
+    public function setLang(LanguageBag $lang)
     {
         $this->lang = $lang;
-
-        return $this;
-    }
-
-    /**
-     * @param mixed $location
-     */
-    public function setLocation($location)
-    {
-        $this->location = $location;
 
         return $this;
     }
@@ -169,16 +147,6 @@ class Repository
     public function setName($name)
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * @param array $tags
-     */
-    public function setTags(array $tags)
-    {
-        $this->tags = $tags;
 
         return $this;
     }

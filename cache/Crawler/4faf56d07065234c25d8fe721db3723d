@@ -1,0 +1,21 @@
+[
+  {
+    "login": "aiolos",
+    "id": 1071879,
+    "avatar_url": "https://avatars.githubusercontent.com/u/1071879?v=3",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/aiolos",
+    "html_url": "https://github.com/aiolos",
+    "followers_url": "https://api.github.com/users/aiolos/followers",
+    "following_url": "https://api.github.com/users/aiolos/following{/other_user}",
+    "gists_url": "https://api.github.com/users/aiolos/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/aiolos/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/aiolos/subscriptions",
+    "organizations_url": "https://api.github.com/users/aiolos/orgs",
+    "repos_url": "https://api.github.com/users/aiolos/repos",
+    "events_url": "https://api.github.com/users/aiolos/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/aiolos/received_events",
+    "type": "User",
+    "site_admin": false
+  }
+]
