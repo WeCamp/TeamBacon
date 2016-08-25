@@ -27,9 +27,9 @@ final class UserController
             function (User $user) {
                 return [
                     'id' => $user->getId(),
-                    'userName' => $user->getLogin(),
+                    'userName' => $user->getUsername(),
                     'fullName' => $user->getName(),
-                    'avatar' => $user->getUrl()
+                    'avatar' => $user->getAvatar()
                 ];
             },
             $users
