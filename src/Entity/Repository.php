@@ -18,6 +18,12 @@ class Repository
     protected $id;
 
     /**
+     * @OGM\Property(type="int")
+     * @var integer
+     */
+    protected $repositoryId;
+
+    /**
      * @OGM\Property(type="string")
      * @var string
      */
@@ -206,4 +212,21 @@ class Repository
     {
         $this->location = $location;
     }
+
+    /**
+     * @return int
+     */
+    public function getRepositoryId(): int
+    {
+        return $this->repositoryId;
+    }
+
+    /**
+     * @param int $repositoryId
+     */
+    public function setRepositoryId(int $repositoryId)
+    {
+        $this->repositoryId = $repositoryId;
+    }
+
 }

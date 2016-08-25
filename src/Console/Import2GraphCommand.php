@@ -77,7 +77,6 @@ class Import2GraphCommand extends Command
             return $output->writeln('No users to import.');
         }
         $userRepository = new Neo4jUserRepository($this->em);
-        $repositoryRepository = new Neo4jRepositoryRepository($this->em);
 
         $existingUserNodes = $userRepository->findAll();
 
@@ -115,17 +114,19 @@ class Import2GraphCommand extends Command
 
     private function handleUsersRepos(RepositoryBag $repoBag)
     {
+        $repositoryRepository = new Neo4jRepositoryRepository($this->em);
+
         $repos = $repoBag->all();
         foreach ($repos as $repo) {
-
-            // todo implement existing check
             $repoNode = $this->transformDTORepo2GraphRepo($repo);
 
-
-
-
+            // don't add if it exists
+            if (!$repositoryRepository->findOneBy('repositoryId', $repo->getId())) {
+                $repositoryRepository->persist($repoNode);
+            }
         }
 
+        return true;
     }
 
     private function extractLocationsFromDTOUser(\Bacon\Service\Crawler\Dto\User $user)
@@ -147,11 +148,12 @@ class Import2GraphCommand extends Command
     private function transformDTORepo2GraphRepo(\Bacon\Service\Crawler\Dto\Repository $repository)
     {
         $node = new Repository();
-        $node->setName($repository->getName());
-        $node->setDescription($repository->getDescription());
-        $node->setBlog($repository->getBlog());
-        $node->setFullName($repository->getFullName());
-        $node->setUrl($repository->getUrl());
+        $node->setRepositoryId($repository->getId());
+        $node->setName((string) $repository->getName());
+        $node->setDescription((string) $repository->getDescription());
+        $node->setBlog((string) $repository->getBlog());
+        $node->setFullName((string) $repository->getFullName());
+        $node->setUrl((string) $repository->getUrl());
 
         return $node;
     }
