@@ -35,7 +35,9 @@ final class UserController
             $users
         );
 
+
         return $response->withHeader('Content-type', 'application/json')
+            ->withHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:3000')
             ->withJson($userInformation, 200);
     }
 }

@@ -8,23 +8,22 @@ class Users extends Component {
     }
 
     render() {
-
-        var users = [
-            {avatar: 'https://avatars3.githubusercontent.com/u/21196816?v=3&amp;s=460', username: 'username'},
-            {avatar: 'https://avatars3.githubusercontent.com/u/21196816?v=3&amp;s=460', username: 'ahilsden'}
-            ];
+        var { users, selectUser } = this.props;
 
         return(
-            <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3 panel panel-default">
+            <div className="col-xs-4 panel panel-default">
                 <h2>List of Users</h2>
 
-                <ul>
-                {users.map((user, index) =>
-                    <User key={index}
-                        avatar={user.avatar}
-                        username={user.username}
+                <ul className="list-of-users">
+                { users.map((user, index) =>
+                    <User key={ index }
+                          id={ user.id }
+                          userName={ user.userName }
+                          fullName={ user.fullName }
+                          avatar={ user.avatar }
+                          selectUser={ selectUser }
                     />
-                )}
+                ) }
                 </ul>
             </div>
         );
