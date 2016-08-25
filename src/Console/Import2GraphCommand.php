@@ -5,6 +5,7 @@ namespace Bacon\Console;
 
 
 use Bacon\Config\Config;
+use Bacon\Entity\Repository;
 use Bacon\Repository\Neo4jRepositoryRepository;
 use Bacon\Repository\Neo4jUserRepository;
 use Bacon\Service\Crawler\Bags\RepositoryBag;
@@ -14,7 +15,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 
 /**
  * Class Import2GraphCommand
@@ -70,29 +70,41 @@ class Import2GraphCommand extends Command
         $controller = new \Bacon\Service\Crawler\Controllers\CrawlerController();
         $org = $controller->getData();
 
-        $users = $org->getMembers()->all();
+        //$users = $org->getMembers()->all();
+        $users = $org->getMembers()->getAFew(4);
 
-        if (!$users) {
+        if (! $users) {
             return $output->writeln('No users to import.');
         }
         $userRepository = new Neo4jUserRepository($this->em);
         $repositoryRepository = new Neo4jRepositoryRepository($this->em);
 
-        foreach ($users as $user) {
+        $existingUserNodes = $userRepository->findAll();
+
+        // keep only the ones that are not in the graph already
+        $usersToPersist = array_filter($users, function ($user) use ($existingUserNodes) {
+            $userNode = $this->transformDTOUser2GraphUser($user);
+            foreach ($existingUserNodes as $existingUserNode) {
+                return ! $existingUserNode->isEqualTo($userNode);
+            }
+        });
+
+
+        // keep using the DTO User object because it contains more data
+        foreach ($usersToPersist as $user) {
+
             /** @var  User $user */
-            $userNode = $this->transformUser($user);
+            $userNode = $this->transformDTOUser2GraphUser($user);
 
-            $usersRepos = $this->transformUsersRepos($user->getRepos());
-            // persist the user
-
+            $this->handleUsersRepos($user->getRepos());
 
             $userRepository->persist($userNode);
 
+
+            // todo get Locations from users and repos
             //$user->contributeToRepository($repository1);
             // transform  user repositories
 
-
-            // persist repos
 
             // create relation between users and repos
         }
@@ -101,9 +113,47 @@ class Import2GraphCommand extends Command
 
     }
 
-    private function transformUsersRepos(RepositoryBag $repoBag)
+    private function handleUsersRepos(RepositoryBag $repoBag)
+    {
+        $repos = $repoBag->all();
+        foreach ($repos as $repo) {
+
+            // todo implement existing check
+            $repoNode = $this->transformDTORepo2GraphRepo($repo);
+
+
+
+
+        }
+
+    }
+
+    private function extractLocationsFromDTOUser(\Bacon\Service\Crawler\Dto\User $user)
     {
 
+    }
+
+    private function extractLocationsFromDTORepo(\Bacon\Service\Crawler\Dto\Repository $repository)
+    {
+
+    }
+
+    /**
+     * Transform a DTO Repository into a Graph node
+     *
+     * @param \Bacon\Service\Crawler\Dto\Repository $repository
+     * @return Repository
+     */
+    private function transformDTORepo2GraphRepo(\Bacon\Service\Crawler\Dto\Repository $repository)
+    {
+        $node = new Repository();
+        $node->setName($repository->getName());
+        $node->setDescription($repository->getDescription());
+        $node->setBlog($repository->getBlog());
+        $node->setFullName($repository->getFullName());
+        $node->setUrl($repository->getUrl());
+
+        return $node;
     }
 
     /**
@@ -112,14 +162,14 @@ class Import2GraphCommand extends Command
      * @param User $user
      * @return \Bacon\Entity\User
      */
-    private function transformUser(User $user)
+    private function transformDTOUser2GraphUser(User $user)
     {
         $node = new \Bacon\Entity\User();
 
-        $node->setName((string) $user->getName());
-        $node->setUsername((string) $user->getLogin());
-        $node->setAvatar((string) $user->getUrl());
-        $node->setBio((string) $user->getBio());
+        $node->setName((string)$user->getName());
+        $node->setUsername((string)$user->getLogin());
+        $node->setAvatar((string)$user->getUrl());
+        $node->setBio((string)$user->getBio());
 
         return $node;
     }
