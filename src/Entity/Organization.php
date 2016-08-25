@@ -41,8 +41,8 @@ class Organization
     private $url;
 
     /**
-     * @OGM\Property(type="string")
-     * @var string
+     * @OGM\Relationship(type="IS_LOCATED_IN", direction="OUTGOING", targetEntity="Bacon\Entity\Location", collection=false)
+     * @var Location
      */
     private $location;
 
@@ -127,17 +127,17 @@ class Organization
     }
 
     /**
-     * @return string
+     * @return Location
      */
-    public function getLocation(): string
+    public function getLocation(): Location
     {
         return $this->location;
     }
 
     /**
-     * @param string $location
+     * @param Location $location
      */
-    public function setLocation(string $location)
+    public function setLocation(Location $location)
     {
         $this->location = $location;
     }

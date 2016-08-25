@@ -59,6 +59,12 @@ class User
      */
     private $repositoriesStars;
 
+    /**
+     * @OGM\Relationship(type="IS_LOCATED_IN", direction="OUTGOING", targetEntity="Bacon\Entity\Location", collection=false)
+     * @var Location
+     */
+    private $location = null;
+
     public function __construct()
     {
         $this->repositoriesContributesTo = new ArrayCollection();
@@ -94,6 +100,22 @@ class User
         if (!$this->repositoriesStars->contains($repository)) {
             $this->repositoriesStars->add($repository);
         }
+    }
+
+    /**
+     * @return Location
+     */
+    public function getLocation(): Location
+    {
+        return $this->location;
+    }
+
+    /**
+     * @param Location $location
+     */
+    public function setLocation(Location $location)
+    {
+        $this->location = $location;
     }
 
     /**

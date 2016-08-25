@@ -5,8 +5,10 @@ require_once '../vendor/autoload.php';
 
 use Bacon\Config\Config;
 use Bacon\Entity\Language;
+use Bacon\Entity\Location;
 use Bacon\Repository\Neo4jLanguageRepository;
 use Bacon\Repository\Neo4jUserRepository;
+use Bacon\Repository\Neo4jLocationRepository;
 use Bacon\Entity\User;
 use Bacon\Repository\Neo4jRepositoryRepository;
 use Bacon\Entity\Repository;
@@ -16,6 +18,7 @@ $manager = EntityManager::create(Config::get()['neo4jHost']);
 
 $userRepository = new Neo4jUserRepository($manager);
 $repositoryRepository = new Neo4jRepositoryRepository($manager);
+$locationRepository = new Neo4jLocationRepository($manager);
 
 $repository1 = new Repository();
 $repository1->setName('Repository 1');
@@ -34,6 +37,12 @@ $user->starRepository($repository1);
 
 $user->watchRepository($repository2);
 
+$location1 = new Location();
+$location1->setLocation('WeCamp');
+$locationRepository->persist($location1);
+
+$user->setLocation($location1);
+
 $userRepository->persist($user);
 $repositoryRepository->persist($repository1);
 
@@ -44,6 +53,7 @@ $language1->setLanguageName('PHP');
 
 $repository1->useLanguage($language1);
 $languageRepository->persist($language1);
+$repositoryRepository->persist($repository1);
 
 
 echo 'done';
