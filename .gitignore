@@ -4,6 +4,7 @@ composer.phar
 /logs/*
 !/logs/README.md
 ./var/cache
+./var/cache/*
 config/*
 !config/.gitkeep
 
