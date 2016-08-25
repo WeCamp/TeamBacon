@@ -27,7 +27,7 @@ Get a list of 1 user
     /api/users/{id}
 
 ## Configuration
-In order to run an application you have to configure it. For that configuration file needs to be created:
+In order to run an application you have to configure it. For that configuration file needs to be created (you can just copy content of local.php.dist):
 
     ./config/local.php
     
