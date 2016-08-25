@@ -2,7 +2,10 @@
 <?php
 require __DIR__ . '/../vendor/autoload.php';
 use Symfony\Component\Console\Application;
+use Bacon\Console\Import2GraphCommand;
+use Bacon\Console\ClearStorageCommand;
 
 $application = new Application();
-$application->add(new \Bacon\Console\Import2GraphCommand());
+$application->add(new Import2GraphCommand());
+$application->add(new ClearStorageCommand());
 $application->run();

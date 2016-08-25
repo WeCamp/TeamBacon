@@ -1,7 +1,7 @@
 # Six Degrees
 
 ## Configuration
-In order to run an application you have to configure it. For that configuration file needs to be created (you can just copy content of local.php.dist):
+In order to run an application you have to configure it. For that configuration file needs to be created (you can just copy content of `local.php.dist`):
 
     ./config/local.php
     
@@ -14,17 +14,21 @@ that returns an array, e.g.
     ];
 
 ## CLI script 
-There's a command line script to import data from github into the graph: `scripts/cli`.
+There are command line scripts to import and clear data from GitHub into the graph: `scripts/cli`.
 In order to use it you first have to make it executable, like so
     
     chmod a+x scripts/cli
 
-You can call it like this: 
+### Import data
 
     ./scripts/cli bacon:import-github user
 
 It requires a few parameters, see `src/Console/Import2GraphCommand.php` for the options.
 The command above will import the users.
+
+### Clear data
+
+    ./scripts/cli bacon:clear-storage
 
 ## Endpoints
 
