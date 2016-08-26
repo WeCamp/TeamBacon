@@ -3,29 +3,26 @@ import User from './User';
 
 class Users extends Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     render() {
-        var { users, selectUser } = this.props;
+        const { users, selectUser } = this.props;
 
         return(
-            <div className="col-xs-4 panel panel-default">
-                <h2>List of Users</h2>
+            <section className="col-xs-4 panel panel-default">
+                <h3>List of Users</h3>
 
-                <ul className="list-of-users">
-                { users.map((user, index) =>
-                    <User key={ index }
-                          id={ user.id }
-                          userName={ user.userName }
-                          fullName={ user.fullName }
-                          avatar={ user.avatar }
-                          selectUser={ selectUser }
+                <ul className="users-list">
+
+                {
+                  users.map((user) =>
+                    <User
+                      key={user.id}
+                      user={user}
+                      selectUser={selectUser}
                     />
-                ) }
+                  )
+                }
                 </ul>
-            </div>
+            </section>
         );
     }
 }

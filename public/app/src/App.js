@@ -1,56 +1,58 @@
 import React, { Component } from 'react';
 import Users from './Users';
-import Content from './Content';
+import userStub from './users.json';
+// import Content from './Content';
 import $ from 'jquery';
 
 class App extends Component {
 
-    apiUrl = 'http://192.168.99.100:8080';
+    static apiUrl = 'http://192.168.99.100:8080';
 
     constructor(props) {
         super(props);
 
-        this.getUsers = this.getUsers.bind(this);
-
         this.state = {
-            users: []
+            users: [],
+            selectedUser: undefined
         };
+    }
 
+    componentDidMount() {
         this.getUsers();
     }
 
     getUsers() {
-        $.ajax({
-            url: this.apiUrl + '/api/users',
-            type: 'GET'
-        }).done((data) => {
-            var state = this.state;
-            state.users = data;
-            this.setState(state);
-        })
+        this.setState({users:userStub})
+        // $.ajax({
+        //     url: App.apiUrl + '/api/users',
+        //     type: 'GET'
+        // }).done(users => {
+        //     this.setState({users});
+        // })
     }
 
     selectUser(userId) {
         $.ajax({
-            url: this.apiUrl +'/api/users/' + userId,
+            url: App.apiUrl +'/api/users/' + userId,
             type: 'GET'
-        }).done((selectedUser) => {
-            var state = this.state;
-            state.selectedUser = selectedUser;
-            this.setState(state);
+        }).done(selectedUser => {
+            this.setState({selectedUser});
         });
     }
 
     render() {
 
         return (
-            <div className="container">
-                <div className="row">
-                    <h1>Six degrees of Bacon</h1>
-                    <Users selectUser={ this.selectUser.bind(this) } users={ this.state.users }/>
-                    <Content />
-                </div>
-            </div>
+            <main>
+                <Users users={this.state.users} />
+
+                <section  className="col-xs-8 panel panel-default">
+                blaat
+                {
+
+                }
+                </section>
+            </main>
         );
     }
 }
