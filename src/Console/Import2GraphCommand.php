@@ -300,7 +300,7 @@ class Import2GraphCommand extends Command
     {
         $node = new \Bacon\Entity\User();
 
-        $node->setName((string)$user->getName());
+        $node->setName((string) ($user->getName()?: $user->getLogin()));
         $node->setUsername((string)$user->getLogin());
         $node->setAvatar((string)$user->getAvatar());
         $node->setBio((string)$user->getBio());
