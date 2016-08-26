@@ -62,19 +62,14 @@ list 100 users
     MATCH (u:User {username: "skoop"})-[:OWNS]->(r) RETURN u,r limit 100
     
 
-list  repos of user with username x
+###list repos of user with username x
     
     MATCH (u:User {username: "mvriel"})-[:SUBSCRIBES_TO]->(r) RETURN u,r limit 100
-    
-    
-MATCH (u:User {username: "mvriel"})-[:SUBSCRIBES_TO]->(s)
-MATCH (u:User {username: "mvriel"})-[:OWNS]->(o)
-RETURN u,s,o
-
-MATCH (u:User {username: "phpcodemonkey"})-[:SUBSCRIBES_TO]->(s)
-MATCH (u:User {username: "phpcodemonkey"})-[:OWNS]->(o)
-MATCH (u:User {username: "phpcodemonkey"})-[:STARS]->(st)
-RETURN u,s,o,st
+   
+### Get the codemonkeys repos
+    MATCH (u:User {username: "phpcodemonkey"})-[:OWNS]->(o)
+    OPTIONAL MATCH (u)-[:SUBSCRIBES_TO]->(s)
+    RETURN u,s,o
 
 #### Get all users with the repository that is using cobol as a language
     MATCH (user: User) -[owns: OWNS]-> (repository: Repository) -[uses: USES]-> (language: Language {languageName: 'COBOL'}) return user, repository

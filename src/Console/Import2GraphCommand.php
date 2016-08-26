@@ -64,6 +64,7 @@ class Import2GraphCommand extends Command
         $this->locationRepo = new Neo4jLocationRepository($this->em);
 
 
+
         if ('user' === $object) {
             $output->writeln('Fetching user details.');
             $controller = new \Bacon\Service\Crawler\Controllers\CrawlerController();
@@ -75,6 +76,18 @@ class Import2GraphCommand extends Command
             $this->handleFollowers($output, $org);
             $this->handleFollowing($output, $org);
             $this->handleLanguages($output, $org);
+        }
+        if ('followers' === $object) {
+            $controller = new \Bacon\Service\Crawler\Controllers\CrawlerController();
+            $org = $controller->getData();
+
+            $this->handleFollowers($output, $org);
+        }
+        if ('following' === $object) {
+            $controller = new \Bacon\Service\Crawler\Controllers\CrawlerController();
+            $org = $controller->getData();
+
+            $this->handleFollowing($output, $org);
         }
 
         $output->writeln('All done.');
@@ -179,8 +192,11 @@ class Import2GraphCommand extends Command
 
         $userRepository = new Neo4jUserRepository($this->em);
 
-        foreach ($users as $dtoUser)
-        {
+        foreach ($users as $dtoUser) {
+            if ($dtoUser->getLogin() === 'skoop') {
+                continue;
+            }
+
             $user = $this->getUser($dtoUser->getLogin());
 
             if ($dtoUser->getFollowers()->count() > 0) {
@@ -197,6 +213,7 @@ class Import2GraphCommand extends Command
                     $userRepository->persist($user);
                 }
             }
+
         }
         
         $output->writeln('Flushing followers');
