@@ -89,16 +89,34 @@ class Import2GraphCommand extends Command
             if (! $userRepository->findOneBy('username', $user->getLogin())) {
                 $userNode = $this->transformDTOUser2GraphUser($user);
 
-                // a users repositories
+                // repositories a user owns
                 $repos = $user->getRepos()->all();
-                if (count($repos) > 0) {
-                    $output->writeln('User has repos.');
+                $repoCount = count($repos);
+                if ($repoCount > 0) {
+                    $output->writeln('User owns ' . $repoCount . ' repos.');
                     foreach ($repos as $repo) {
                         $repoNode = $this->transformDTORepo2GraphRepo($repo);
 
                         // don't add if it exists
                         if (! $repositoryRepository->findOneBy('repositoryId', $repo->getId())) {
                             $userNode->ownsRepository($repoNode);
+                            $repositoryRepository->persist($repoNode);
+                        }
+                    }
+                    $repositoryRepository->flush();
+                }
+
+                // repositories a user subscribed to
+                $repos = $user->getSubscription()->all();
+                $repoCount = count($repos);
+                if ($repoCount > 0) {
+                    $output->writeln('User subscibed to ' . $repoCount . ' repos.');
+                    foreach ($repos as $repo) {
+                        $repoNode = $this->transformDTORepo2GraphRepo($repo);
+
+                        // don't add if it exists
+                        if (! $repositoryRepository->findOneBy('repositoryId', $repo->getId())) {
+                            $userNode->subsribesToRepository($repoNode);
                             $repositoryRepository->persist($repoNode);
                         }
                     }

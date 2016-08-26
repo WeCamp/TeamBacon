@@ -57,10 +57,12 @@ list 100 users
     
     MATCH (u:User) RETURN u.username LIMIT 100
     
-    MATCH (u:User {username: "dennisdegreef"})-[:CONTRIBUTES_TO]->(r) RETURN u,r limit 100
+    MATCH (u:User {username: "skoop"})-[:SUBSCRIBES_TO]->(r) RETURN u,r limit 100
+    
+    MATCH (u:User {username: "skoop"})-[:OWNS]->(r) RETURN u,r limit 100
     
 
 list  repos of user with username x
     
-    MATCH (u:User {username: "mvriel"})-[:CONTRIBUTES_TO]->(r) RETURN u,r limit 100
+    MATCH (u:User {username: "mvriel"})-[:SUBSCRIBES_TO]->(r) RETURN u,r limit 100
     
