@@ -9,7 +9,44 @@
     <title>Six Degrees</title>
 </head>
 <body>
-    <div id="root"></div>
-    <script src="app/build/static/js/main.5a1bf368.js"></script>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Six Degrees</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="https://neo4j.com/developer/cypher-query-language/" target="_blank">Help</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <?php foreach ($data['users'] as $user): ?>
+                    <li><a href="#"><?php echo $user->getUsername(); ?></a></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+        <div class="main">
+            <iframe src="http://192.168.99.100:7474/browser/" name="neo4j" width="83%" height="100%"></iframe>
+        </div>
+    </div>
+</div>
+
+<div id="root"></div>
+<script src="/app/node_modules/jquery/dist/jquery.min.js"></script>
+<script src="/app/styling.js"></script>
 </body>
 </html>

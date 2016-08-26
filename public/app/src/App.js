@@ -23,12 +23,12 @@ class App extends Component {
 
     getUsers() {
         this.setState({users:userStub})
-        // $.ajax({
-        //     url: App.apiUrl + '/api/users',
-        //     type: 'GET'
-        // }).done(users => {
-        //     this.setState({users});
-        // })
+        $.ajax({
+            url: App.apiUrl + '/api/users',
+            type: 'GET'
+        }).done(users => {
+            this.setState({users});
+        })
     }
 
     selectUser(userId) {

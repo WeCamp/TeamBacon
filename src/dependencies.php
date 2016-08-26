@@ -46,7 +46,7 @@ $container['Neo4jUserRepository'] = function ($c) {
 
 // Controllers
 $container['IndexController'] = function ($c) {
-    return new IndexController($c['view']);
+    return new IndexController($c['Neo4jUserRepository'], $c['view']);
 };
 
 $container['UserController'] = function ($c) {
