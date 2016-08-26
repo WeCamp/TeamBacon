@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Bacon\Controllers;
 
+use Bacon\Config\Config;
 use Bacon\Entity\User;
 use Bacon\Repository\Neo4jUserRepository;
 use Psr\Http\Message\ServerRequestInterface;
@@ -42,6 +43,10 @@ final class IndexController
         /** @var User[] $users */
         $users = $this->userRepository->findAll();
 
-        return $this->phpRenderer->render($response, 'index.phtml', ['users' => $users]);
+        return $this->phpRenderer->render(
+            $response,
+            'index.phtml',
+            ['users' => $users, 'neo4jIframeHost' => Config::get()['neo4jIframeHost']]
+        );
     }
 }

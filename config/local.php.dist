@@ -2,6 +2,7 @@
 
 return [
     'neo4jHost' => 'http://neo4j:neo4jneo4j@neo4j:7474',
+    'neo4jIframeHost' => 'localhost',
 
     'githubCrawler' => [
         'cacheDir' => __DIR__ . '/../cache/Crawler/',
