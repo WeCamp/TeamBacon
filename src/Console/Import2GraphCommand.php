@@ -144,7 +144,22 @@ class Import2GraphCommand extends Command
                     $repositoryRepository->flush();
                 }
 
-                // users locations
+                // repositories a user starred
+                $repos = $user->getStarred()->all();
+                $repoCount = count($repos);
+                if ($repoCount > 0) {
+                    $output->writeln('User starred ' . $repoCount . ' repos.');
+                    foreach ($repos as $repo) {
+                        $repoNode = $this->transformDTORepo2GraphRepo($repo);
+
+                        // don't add if it exists
+                        if (! $repositoryRepository->findOneBy('repositoryId', $repo->getId())) {
+                            $userNode->starRepository($repoNode);
+                            $repositoryRepository->persist($repoNode);
+                        }
+                    }
+                    $repositoryRepository->flush();
+                }
 
 
                 $userRepository->persist($userNode);
