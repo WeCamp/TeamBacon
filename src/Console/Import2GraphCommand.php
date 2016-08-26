@@ -45,7 +45,7 @@ class Import2GraphCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        ini_set('memory_limit','400M');
+        ini_set('memory_limit','-1');
         $object = $input->getArgument('object');
 
         // outputs multiple lines to the console (adding "\n" at the end of each line)
@@ -87,7 +87,7 @@ class Import2GraphCommand extends Command
 
         // Extract and create Locations and Languages
 //        $this->extractLocationsFromDTOUsers($users);
-        $this->extractRepoLanguagesFromDTOUsers($users);
+        //$this->extractRepoLanguagesFromDTOUsers($users);
 
         $output->writeln('Found ' . count($users) . ' users.');
         if (! $users) {
@@ -109,7 +109,7 @@ class Import2GraphCommand extends Command
                 $repos = $user->getRepos()->all();
                 $repoCount = count($repos);
                 if ($repoCount > 0) {
-                    $output->writeln('User owns ' . $repoCount . ' repos.');
+                    $output->writeln('Handling ' . $user->getLogin() . ' user owns ' . $repoCount . ' repos.');
                     foreach ($repos as $repo) {
                         $repoNode = $this->transformDTORepo2GraphRepo($repo);
 
@@ -158,6 +158,8 @@ class Import2GraphCommand extends Command
 
 
                 $userRepository->persist($userNode);
+                $userRepository->flush();
+                $output->writeln('FLushing');
 
             }
 
@@ -169,7 +171,7 @@ class Import2GraphCommand extends Command
             // create relation between users and repos
         }
 
-        $userRepository->flush();
+        //$userRepository->flush();
 
     }
 
