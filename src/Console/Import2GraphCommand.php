@@ -61,11 +61,13 @@ class Import2GraphCommand extends Command
 
 
         if ('user' === $object) {
+            $output->writeln('Fetching user details.');
             $controller = new \Bacon\Service\Crawler\Controllers\CrawlerController();
             $org = $controller->getData();
 
             $this->handleUsers($output, $org);
             $this->handleLanguages($output, $org);
+            $this->handleLocation($output, $org);
         }
 
         $output->writeln('All done.');
@@ -81,9 +83,6 @@ class Import2GraphCommand extends Command
      */
     private function handleUsers(OutputInterface $output, $org)
     {
-
-        $output->writeln('Fetching user details.');
-
         $controller = new \Bacon\Service\Crawler\Controllers\CrawlerController();
         $org = $controller->getData();
 
@@ -163,7 +162,7 @@ class Import2GraphCommand extends Command
 
                 $userRepository->persist($userNode);
                 $userRepository->flush();
-                $output->writeln('FLushing');
+                $output->writeln('Flushing');
 
             }
 
@@ -197,21 +196,48 @@ class Import2GraphCommand extends Command
             $repos = $user->getRepos()->all();
             $repoCount = count($repos);
             if ($repoCount > 0) {
-                $output->writeln('Handling ' . $user->getLogin() . ' user owns ' . $repoCount . ' repos.');
                 foreach ($repos as $repo) {
-                    $repository = $repositoryRepository->findOneBy('repositoryId', $repo->getId());
-                    foreach ($repo->getLang() as $language) {
-                        if ($this->languages[$language->getLanguage()]) {
-                            $repository->useLanguage($this->languages[$language->getLanguage()]);
+                    if ($repo->getLang()->count() > 0) {
+                        $repository = $repositoryRepository->findOneBy('repositoryId', $repo->getId());
+                        $output->writeln('Adding ' . $repo->getLang()->count() . ' languages to ' . $repo->getFullName());
+                        foreach ($repo->getLang() as $language) {
+                            if ($this->languages[$language->getLanguage()]) {
+                                $repository->useLanguage($this->languages[$language->getLanguage()]);
+                            }
                         }
+                        $repositoryRepository->persist($repository);
                     }
-                    $repositoryRepository->persist($repository);
 
                 }
-                $output->writeln('FLushing');
+                $output->writeln('Flushing repo\'s with languages');
                 $repositoryRepository->flush();
             }
         }
+    }
+
+
+    private function handleLocation(OutputInterface $output, $org)
+    {
+        $output->writeln('Adding location details.');
+
+        $userRepository = new Neo4jUserRepository($this->em);
+
+        $users = $org->getMembers()->all();
+
+        // Extract and create Languages
+        $this->extractLocationsFromDTOUsers($users);
+
+        // all data is delivered in one big blob
+        foreach ($users as $dtoUser) {
+            if ($dtoUser->getLocation() && $this->locations[$dtoUser->getLocation()] instanceof Location) {
+                $output->writeln('Updating ' . $dtoUser->getLogin() . ' location to ' . $dtoUser->getLocation());
+                $user = $userRepository->findOneBy('username', $dtoUser->getLogin());
+                $user->setLocation($this->locations[$dtoUser->getLocation()]);
+                $userRepository->persist($user);
+            }
+        }
+        $output->writeln('Flushing user\'s with location');
+        $userRepository->flush();
     }
 
     private function extractLocationsFromDTOUsers(array $users)
@@ -225,6 +251,7 @@ class Import2GraphCommand extends Command
                 $this->locations[(string)$location] = $locationNode;
             }
         }
+        $this->locationRepo->flush();
     }
 
     private function extractRepoLanguagesFromDTOUsers(array $users)
