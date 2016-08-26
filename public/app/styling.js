@@ -7,5 +7,5 @@ $(document).ready(function() {
 });
 
 function resize() {
-    $('iframe[name=neo4j]').attr('height', ($(window).height() - 48) + 'px');
+    $('#neo4j').attr('height', ($(window).height() - 48) + 'px');
 }
