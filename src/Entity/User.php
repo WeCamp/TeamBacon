@@ -66,11 +66,25 @@ class User
      */
     private $location = null;
 
+    /**
+     * @OGM\Relationship(type="FOLLOWS", direction="OUTGOING", targetEntity="Bacon\Entity\User", collection=true)
+     * @var Location
+     */
+    private $follows = null;
+
+    /**
+     * @OGM\Relationship(type="FOLLOWED_BY", direction="OUTGOING", targetEntity="Bacon\Entity\User", collection=true)
+     * @var Location
+     */
+    private $followedBy = null;
+
     public function __construct()
     {
         $this->repositoriesOwns = new ArrayCollection();
         $this->repositoriesSubscribedTo = new ArrayCollection();
         $this->repositoriesStars = new ArrayCollection();
+        $this->follows = new ArrayCollection();
+        $this->followedBy = new ArrayCollection();
     }
 
     /**
@@ -80,6 +94,26 @@ class User
     {
         if (!$this->repositoriesOwns->contains($repository)) {
             $this->repositoriesOwns->add($repository);
+        }
+    }
+
+    /**
+     * @param User $user
+     */
+    public function setFollows(self $user)
+    {
+        if (!$this->follows->contains($user)) {
+            $this->follows->add($user);
+        }
+    }
+
+    /**
+     * @param User $user
+     */
+    public function setFollowedBy(self $user)
+    {
+        if (!$this->followedBy->contains($user)) {
+            $this->followedBy->add($user);
         }
     }
 

@@ -30,8 +30,11 @@ class Import2GraphCommand extends Command
     private $em;
     private $languages = [];
     private $locations = [];
+    private $userRepo;
     private $languageRepo;
     private $locationRepo;
+    private $users = [];
+    private $follows = [];
 
     protected function configure()
     {
@@ -56,6 +59,7 @@ class Import2GraphCommand extends Command
 
 
         $this->em = EntityManager::create(Config::get()['neo4jHost']);
+        $this->userRepo = new Neo4jUserRepository($this->em);
         $this->languageRepo = new Neo4jLanguageRepository($this->em);
         $this->locationRepo = new Neo4jLocationRepository($this->em);
 
@@ -66,8 +70,11 @@ class Import2GraphCommand extends Command
             $org = $controller->getData();
 
             $this->handleUsers($output, $org);
-            $this->handleLanguages($output, $org);
             $this->handleLocation($output, $org);
+            $this->handleFollowingUsers($output);
+            $this->handleFollowers($output, $org);
+            $this->handleFollowing($output, $org);
+            $this->handleLanguages($output, $org);
         }
 
         $output->writeln('All done.');
@@ -87,10 +94,6 @@ class Import2GraphCommand extends Command
         $org = $controller->getData();
 
         $users = $org->getMembers()->all();
-
-        // Extract and create Locations and Languages
-//        $this->extractLocationsFromDTOUsers($users);
-        //$this->extractRepoLanguagesFromDTOUsers($users);
 
         $output->writeln('Found ' . count($users) . ' users.');
         if (! $users) {
@@ -159,25 +162,94 @@ class Import2GraphCommand extends Command
                     $repositoryRepository->flush();
                 }
 
-
+                $this->users[$userNode->getUsername()] = $userNode;
                 $userRepository->persist($userNode);
                 $userRepository->flush();
                 $output->writeln('Flushing');
 
             }
-
-            // todo get Locations from users and repos
-            //$user->contributeToRepository($repository1);
-            // transform  user repositories
-
-
-            // create relation between users and repos
         }
-
-        //$userRepository->flush();
-
     }
 
+
+    private function handleFollowers(OutputInterface $output, $org)
+    {
+        $output->writeln('Getting followers details.');
+        $users = $org->getMembers()->all();
+
+        $userRepository = new Neo4jUserRepository($this->em);
+
+        foreach ($users as $dtoUser)
+        {
+            $user = $this->getUser($dtoUser->getLogin());
+
+            if ($dtoUser->getFollowers()->count() > 0) {
+                $output->writeln('Adding ' . $dtoUser->getFollowers()->count() . ' followers to ' . $dtoUser->getLogin());
+                foreach ($dtoUser->getFollowers() as $dtoFollower) {
+                    $follower = $this->getUser($dtoFollower->getLogin());
+                    if (!$follower) {
+                        $follower = $this->transformDTOUser2GraphUser($dtoFollower);
+                        $this->users[$dtoFollower->getLogin()] = $follower;
+                        $userRepository->persist($follower);
+                    }
+
+                    $user->setFollowedBy($follower);
+                    $userRepository->persist($user);
+                }
+            }
+        }
+        
+        $output->writeln('Flushing followers');
+        $userRepository->flush();
+    }
+
+    private function handleFollowing(OutputInterface $output, $org)
+    {
+        $output->writeln('Getting following details.');
+        $users = $org->getMembers()->all();
+        $userRepository = new Neo4jUserRepository($this->em);
+
+        foreach ($users as $dtoUser)
+        {
+            $user = $this->getUser($dtoUser->getLogin());
+
+            if ($dtoUser->getFollowing()->count() > 0) {
+                $output->writeln('Adding ' . $dtoUser->getFollowing()->count() . ' following users to ' . $dtoUser->getLogin());
+                foreach ($dtoUser->getFollowing() as $dtoFollowing) {
+                    $following = $this->getUser($dtoFollowing->getLogin());
+                    if (!$following) {
+                        $following = $this->transformDTOUser2GraphUser($dtoFollowing);
+                        $this->users[$dtoFollowing->getLogin()] = $following;
+                        $userRepository->persist($following);
+                    }
+
+                    $user->setFollowedBy($following);
+                    $userRepository->persist($user);
+                }
+            }
+        }
+
+        $output->writeln('Flushing followings');
+        $userRepository->flush();
+    }
+
+    private function getUser($username)
+    {
+        $userRepository = new Neo4jUserRepository($this->em);
+        if (!isset($this->users[$username])) {
+            $user = $userRepository->findOneBy('username', $username);
+            if ($user)
+            {
+                $this->users[$username] = $user;
+
+                return $user;
+            }
+
+            return false;
+        }
+
+        return $this->users[$username];
+    }
 
     private function handleLanguages(OutputInterface $output, $org)
     {
@@ -229,15 +301,43 @@ class Import2GraphCommand extends Command
 
         // all data is delivered in one big blob
         foreach ($users as $dtoUser) {
+
+            $this->storeFollows($dtoUser->getFollowers()->all());
+            $this->storeFollows($dtoUser->getFollowing()->all());
+
             if ($dtoUser->getLocation() && $this->locations[$dtoUser->getLocation()] instanceof Location) {
                 $output->writeln('Updating ' . $dtoUser->getLogin() . ' location to ' . $dtoUser->getLocation());
-                $user = $userRepository->findOneBy('username', $dtoUser->getLogin());
+                $user = $this->getUser($dtoUser->getLogin());
                 $user->setLocation($this->locations[$dtoUser->getLocation()]);
                 $userRepository->persist($user);
             }
         }
         $output->writeln('Flushing user\'s with location');
         $userRepository->flush();
+    }
+
+    private function storeFollows($users)
+    {
+        foreach ($users as $user)
+        {
+            $following = $this->getUser($user->getLogin());
+            if (!$following && !isset($this->follows[$user->getLogin()])) {
+                $following = $this->transformDTOUser2GraphUser($user);
+                $this->users[$user->getLogin()] = $following;
+                $this->follows[$user->getLogin()] = $following;
+            }
+        }
+    }
+
+    private function handleFollowingUsers($output)
+    {
+        $output->writeln('Adding follower/ing users');
+        foreach ($this->follows as $user)
+        {
+            $this->userRepo->persist($user);
+        }
+        $this->userRepo->flush();
+        $output->writeln('Finished adding follower/ing users');
     }
 
     private function extractLocationsFromDTOUsers(array $users)
