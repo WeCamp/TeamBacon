@@ -66,3 +66,16 @@ list  repos of user with username x
     
     MATCH (u:User {username: "mvriel"})-[:SUBSCRIBES_TO]->(r) RETURN u,r limit 100
     
+    
+MATCH (u:User {username: "mvriel"})-[:SUBSCRIBES_TO]->(s)
+MATCH (u:User {username: "mvriel"})-[:OWNS]->(o)
+RETURN u,s,o
+
+MATCH (u:User {username: "mvriel"})-[:SUBSCRIBES_TO]->(s)
+MATCH (u:User {username: "mvriel"})-[:OWNS]->(o)
+MATCH (u:User {username: "mvriel"})-[:STARS]->(st)
+RETURN u,s,ot
+
+MATCH (user:User { name: 'Adam' })-[r1:FRIEND]-(friend)
+MATCH (friend)-[r2:FRIEND]-(friend_of_a_friend)
+RETURN friend_of_a_friend.name AS fofName
