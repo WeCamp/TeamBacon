@@ -75,3 +75,15 @@ MATCH (u:User {username: "phpcodemonkey"})-[:SUBSCRIBES_TO]->(s)
 MATCH (u:User {username: "phpcodemonkey"})-[:OWNS]->(o)
 MATCH (u:User {username: "phpcodemonkey"})-[:STARS]->(st)
 RETURN u,s,o,st
+
+#### Get all users with the repository that is using cobol as a language
+    MATCH (user: User) -[owns: OWNS]-> (repository: Repository) -[uses: USES]-> (language: Language {languageName: 'COBOL'}) return user, repository
+
+#### Get a list with the amount of languages for each repository
+    MATCH (repository: Repository) -[uses: USES]-> (language: Language {}) return repository.name, count(language) ORDER BY count(language) desc
+
+#### Get a list with the amount of languages for each user
+    MATCH (user: User) -[owns: OWNS]-> (repository: Repository) -[uses: USES]-> (language: Language {}) return user..name, count(language) ORDER BY count(language) desc
+
+#### Get all repositories from mike van riel
+    MATCH (u:User {username: "mvriel"})-[:OWNS]->(o) OPTIONAL MATCH (u:User {username: "mvriel"})-[:SUBSCRIBES_TO]->(s) RETURN u,s,o

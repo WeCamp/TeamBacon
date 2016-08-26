@@ -35,7 +35,10 @@
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
                 <?php foreach ($data['users'] as $user): ?>
-                    <li><a href="#"><?php echo $user->getUsername(); ?></a></li>
+                    <li class="clearfix">
+                        <p class="pull-left"><img class="img-circle" src="<?php echo $user->getAvatar();?>" style="width:50px;height:50px;" alt=""/></p>
+                        <a href="#" style="display: inline-block;margin-left:-4px;"><?php echo $user->getUsername(); ?></a>
+                    </li>
                 <?php endforeach; ?>
             </ul>
         </div>
