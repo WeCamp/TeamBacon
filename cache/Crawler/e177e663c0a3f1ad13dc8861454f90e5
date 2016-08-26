@@ -1,0 +1,20 @@
+{
+  "C": 13843520,
+  "C++": 7494287,
+  "HTML": 692450,
+  "Groff": 624946,
+  "Shell": 521847,
+  "Makefile": 512264,
+  "Objective-C": 487734,
+  "Ragel in Ruby Host": 314423,
+  "TeX": 145157,
+  "CMake": 81948,
+  "M4": 62039,
+  "TXL": 40965,
+  "Perl": 28997,
+  "Pascal": 26071,
+  "Batchfile": 19747,
+  "Ruby": 7128,
+  "VimL": 5889,
+  "Awk": 2296
+}

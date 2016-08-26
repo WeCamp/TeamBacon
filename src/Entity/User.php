@@ -42,16 +42,16 @@ class User
     private $avatar;
 
     /**
-     * @OGM\Relationship(type="CONTRIBUTES_TO", direction="OUTGOING", targetEntity="Bacon\Entity\Repository", collection=true)
+     * @OGM\Relationship(type="OWNS", direction="OUTGOING", targetEntity="Bacon\Entity\Repository", collection=true)
      * @var ArrayCollection|Repository[]
      */
-    private $repositoriesContributesTo;
+    private $repositoriesOwns;
 
     /**
-     * @OGM\Relationship(type="WATCHES", direction="OUTGOING", targetEntity="Bacon\Entity\Repository", collection=true)
+     * @OGM\Relationship(type="SUBSCRIBES_TO", direction="OUTGOING", targetEntity="Bacon\Entity\Repository", collection=true)
      * @var ArrayCollection|Repository[]
      */
-    private $repositoriesWatches;
+    private $repositoriesSubscribedTo;
 
     /**
      * @OGM\Relationship(type="STARS", direction="OUTGOING", targetEntity="Bacon\Entity\Repository", collection=true)
@@ -67,28 +67,28 @@ class User
 
     public function __construct()
     {
-        $this->repositoriesContributesTo = new ArrayCollection();
-        $this->repositoriesWatches = new ArrayCollection();
+        $this->repositoriesOwns = new ArrayCollection();
+        $this->repositoriesSubscribedTo = new ArrayCollection();
         $this->repositoriesStars = new ArrayCollection();
     }
 
     /**
      * @param Repository $repository
      */
-    public function contributeToRepository(Repository $repository)
+    public function ownsRepository(Repository $repository)
     {
-        if (!$this->repositoriesContributesTo->contains($repository)) {
-            $this->repositoriesContributesTo->add($repository);
+        if (!$this->repositoriesOwns->contains($repository)) {
+            $this->repositoriesOwns->add($repository);
         }
     }
 
     /**
      * @param Repository $repository
      */
-    public function watchRepository(Repository $repository)
+    public function subsribesToRepository(Repository $repository)
     {
-        if (!$this->repositoriesWatches->contains($repository)) {
-            $this->repositoriesWatches->add($repository);
+        if (!$this->repositoriesSubscribedTo->contains($repository)) {
+            $this->repositoriesSubscribedTo->add($repository);
         }
     }
 

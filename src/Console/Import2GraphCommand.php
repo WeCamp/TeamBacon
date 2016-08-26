@@ -5,7 +5,9 @@ namespace Bacon\Console;
 
 
 use Bacon\Config\Config;
+use Bacon\Entity\Language;
 use Bacon\Entity\Repository;
+use Bacon\Repository\Neo4jLanguageRepository;
 use Bacon\Repository\Neo4jRepositoryRepository;
 use Bacon\Repository\Neo4jUserRepository;
 use Bacon\Service\Crawler\Dto\User as IncomingUser;
@@ -24,6 +26,10 @@ class Import2GraphCommand extends Command
 {
 
     private $em;
+    private $languages = [];
+    private $locations = [];
+    private $languageRepo;
+    private $locationRepo;
 
     protected function configure()
     {
@@ -47,6 +53,8 @@ class Import2GraphCommand extends Command
 
 
         $this->em = EntityManager::create(Config::get()['neo4jHost']);
+        $this->languageRepo = new Neo4jLanguageRepository($this->em);
+
         if ('user' === $object) {
             $this->handleUsers($output);
         }
@@ -65,12 +73,25 @@ class Import2GraphCommand extends Command
      */
     private function handleUsers(OutputInterface $output)
     {
+
         $output->writeln('Fetching user details.');
 
         $controller = new \Bacon\Service\Crawler\Controllers\CrawlerController();
         $org = $controller->getData();
 
         $users = $org->getMembers()->all();
+
+        // Extract and create Locations
+
+
+        // Extract and create Languages
+        $this->extractRepoLanguagesFromDTOUsers($users);
+
+        // Extract and creates repos associating them to languages
+        $repos = [
+            'wecamp/teambacon' => new Repository(),
+        ];
+        // Extract and create users associating them to repo and language
         //$users = $org->getMembers()->getAFew(4);
 
         $output->writeln('Found ' . count($users) . ' users.');
@@ -89,22 +110,41 @@ class Import2GraphCommand extends Command
             if (! $userRepository->findOneBy('username', $user->getLogin())) {
                 $userNode = $this->transformDTOUser2GraphUser($user);
 
-
-                // a users repositories
+                // repositories a user owns
                 $repos = $user->getRepos()->all();
-                if (count($repos) > 0) {
-                    $output->writeln('User has repos.');
+                $repoCount = count($repos);
+                if ($repoCount > 0) {
+                    $output->writeln('User owns ' . $repoCount . ' repos.');
                     foreach ($repos as $repo) {
                         $repoNode = $this->transformDTORepo2GraphRepo($repo);
 
                         // don't add if it exists
                         if (! $repositoryRepository->findOneBy('repositoryId', $repo->getId())) {
-                            $userNode->contributeToRepository($repoNode);
+                            $userNode->ownsRepository($repoNode);
                             $repositoryRepository->persist($repoNode);
                         }
                     }
                     $repositoryRepository->flush();
                 }
+
+                // repositories a user subscribed to
+                $repos = $user->getSubscription()->all();
+                $repoCount = count($repos);
+                if ($repoCount > 0) {
+                    $output->writeln('User subscibed to ' . $repoCount . ' repos.');
+                    foreach ($repos as $repo) {
+                        $repoNode = $this->transformDTORepo2GraphRepo($repo);
+
+                        // don't add if it exists
+                        if (! $repositoryRepository->findOneBy('repositoryId', $repo->getId())) {
+                            $userNode->subsribesToRepository($repoNode);
+                            $repositoryRepository->persist($repoNode);
+                        }
+                    }
+                    $repositoryRepository->flush();
+                }
+
+                // users locations
 
 
                 $userRepository->persist($userNode);
@@ -129,9 +169,20 @@ class Import2GraphCommand extends Command
 
     }
 
-    private function extractLocationsFromDTORepo(\Bacon\Service\Crawler\Dto\Repository $repository)
+    private function extractRepoLanguagesFromDTOUsers(array $users)
     {
-
+        foreach ($users as $user) {
+            foreach ($user->getRepos() as $repo) {
+                foreach ($repo->getLang() as $DTOLanguage) {
+                    if (!isset($this->languages[$DTOLanguage->getLanguage()])) {
+                        $languageNode = new Language();
+                        $languageNode->setLanguageName($DTOLanguage->getLanguage());
+                        $this->languageRepo->persist($languageNode);
+                        $this->languages[$DTOLanguage->getLanguage()] = $languageNode;
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -149,6 +200,10 @@ class Import2GraphCommand extends Command
         $node->setBlog((string)$repository->getBlog());
         $node->setFullName((string)$repository->getFullName());
         $node->setUrl((string)$repository->getUrl());
+        foreach ($repository->getLang() as $language)
+        {
+            $node->useLanguage($this->languages[$language->getLanguage()]);
+        }
 
         return $node;
     }
@@ -165,7 +220,7 @@ class Import2GraphCommand extends Command
 
         $node->setName((string)$user->getName());
         $node->setUsername((string)$user->getLogin());
-        $node->setAvatar((string)$user->getUrl());
+        $node->setAvatar((string)$user->getAvatar());
         $node->setBio((string)$user->getBio());
 
         return $node;

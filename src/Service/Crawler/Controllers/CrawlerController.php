@@ -91,12 +91,14 @@ class CrawlerController
             // Get the repositories associated with this user
             $repoBag = $this->getReposFromUrl($this->apiURL . 'users/' . $object->login . '/repos');
             $starredRepoBag = $this->getReposFromUrl($this->apiURL . 'users/' . $object->login . '/starred');
+            $subscriptionsRepoBag = $this->getReposFromUrl($this->apiURL . 'users/' . $object->login . '/subscriptions');
             // And all the followed/following data
             $followingUserBag = $this->getUsersFromUrl($this->apiURL . 'users/' . $object->login . '/following');
             $followersUserBag = $this->getUsersFromUrl($this->apiURL . 'users/' . $object->login . '/followers');
 
             // Associate all this new data to our User object and add that to our UserBag
             $user->setFollowers($followersUserBag);
+            $user->setSubscription($subscriptionsRepoBag);
             $user->setFollowing($followingUserBag);
             $user->setRepos($repoBag);
             $user->setStarred($starredRepoBag);
