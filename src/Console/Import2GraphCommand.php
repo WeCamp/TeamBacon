@@ -106,6 +106,7 @@ class Import2GraphCommand extends Command
                     $repositoryRepository->flush();
                 }
 
+                // users locations
 
                 $userRepository->persist($userNode);
 
@@ -165,7 +166,7 @@ class Import2GraphCommand extends Command
 
         $node->setName((string)$user->getName());
         $node->setUsername((string)$user->getLogin());
-        $node->setAvatar((string)$user->getUrl());
+        $node->setAvatar((string)$user->getAvatar());
         $node->setBio((string)$user->getBio());
 
         return $node;
