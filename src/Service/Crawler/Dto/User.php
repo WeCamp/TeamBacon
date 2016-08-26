@@ -18,6 +18,7 @@ class User
     protected $name;
     protected $repos;
     protected $starred;
+    protected $subscription;
     protected $url;
     protected $avatar;
 
@@ -141,6 +142,14 @@ class User
     }
 
     /**
+     * @return RepositoryBag
+     */
+    public function getSubscription()
+    {
+        return $this->subscription;
+    }
+
+    /**
      * @return mixed
      */
     public function getUrl()
@@ -247,6 +256,17 @@ class User
 
         return $this;
     }
+
+    /**
+     * @param RepositoryBag $subscription
+     */
+    public function setSubscription(RepositoryBag $subscription)
+    {
+        $this->subscription = $subscription;
+
+        return $this;
+    }
+
 
     /**
      * @param mixed $url
