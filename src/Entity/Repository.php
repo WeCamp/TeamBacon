@@ -60,16 +60,16 @@ class Repository
     private $location;
 
     /**
-     * @OGM\Relationship(type="CONTRIBUTES_TO", direction="OUTGOING", targetEntity="Bacon\Entity\User", collection=true, mappedBy="repositoriesContributesTo")
+     * @OGM\Relationship(type="OWNS", direction="OUTGOING", targetEntity="Bacon\Entity\User", collection=true, mappedBy="repositoriesContributesTo")
      * @var ArrayCollection|User[]
      */
-    private $usersContributeToRepository;
+    private $usersOwnsRepository;
 
     /**
-     * @OGM\Relationship(type="WATCHES", direction="OUTGOING", targetEntity="Bacon\Entity\User", collection=true, mappedBy="repositoriesWatches")
+     * @OGM\Relationship(type="SUBSCRIBES_TO", direction="OUTGOING", targetEntity="Bacon\Entity\User", collection=true, mappedBy="repositoriesWatches")
      * @var ArrayCollection|User[]
      */
-    private $usersWatchRepository;
+    private $usersSubscribedToRepository;
 
     /**
      * @OGM\Relationship(type="STARS", direction="OUTGOING", targetEntity="Bacon\Entity\User", collection=true, mappedBy="repositoriesStars")
@@ -95,8 +95,8 @@ class Repository
 
     public function __construct()
     {
-        $this->usersContributeToRepository = new ArrayCollection();
-        $this->usersWatchRepository = new ArrayCollection();
+        $this->usersOwnsRepository = new ArrayCollection();
+        $this->usersSubscribedToRepository = new ArrayCollection();
         $this->usersStarRepository = new ArrayCollection();
         $this->languagesBelongsToRepository = new ArrayCollection();
     }

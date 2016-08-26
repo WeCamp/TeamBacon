@@ -89,7 +89,6 @@ class Import2GraphCommand extends Command
             if (! $userRepository->findOneBy('username', $user->getLogin())) {
                 $userNode = $this->transformDTOUser2GraphUser($user);
 
-
                 // a users repositories
                 $repos = $user->getRepos()->all();
                 if (count($repos) > 0) {
@@ -99,7 +98,7 @@ class Import2GraphCommand extends Command
 
                         // don't add if it exists
                         if (! $repositoryRepository->findOneBy('repositoryId', $repo->getId())) {
-                            $userNode->contributeToRepository($repoNode);
+                            $userNode->ownsRepository($repoNode);
                             $repositoryRepository->persist($repoNode);
                         }
                     }
@@ -107,6 +106,7 @@ class Import2GraphCommand extends Command
                 }
 
                 // users locations
+
 
                 $userRepository->persist($userNode);
 
