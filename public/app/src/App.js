@@ -4,7 +4,6 @@ import userStub from './users.json';
 // import Content from './Content';
 import $ from 'jquery';
 
-console.log(userStub);
 class App extends Component {
 
     static apiUrl = 'http://192.168.99.100:8080';
@@ -47,7 +46,8 @@ class App extends Component {
             <main>
                 <Users users={this.state.users} />
 
-                <section>
+                <section  className="col-xs-8 panel panel-default">
+                blaat
                 {
 
                 }

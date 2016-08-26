@@ -8,9 +8,9 @@ class Users extends Component {
 
         return(
             <section className="col-xs-4 panel panel-default">
-                <h2>List of Users</h2>
+                <h3>List of Users</h3>
 
-                <ul className="list-of-users">
+                <ul className="users-list">
 
                 {
                   users.map((user) =>
