@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import Users from './Users';
-import Content from './Content';
+import userStub from './users.json';
+// import Content from './Content';
 import $ from 'jquery';
 
+console.log(userStub);
 class App extends Component {
 
     static apiUrl = 'http://192.168.99.100:8080';
@@ -14,17 +16,20 @@ class App extends Component {
             users: [],
             selectedUser: undefined
         };
+    }
 
+    componentDidMount() {
         this.getUsers();
     }
 
     getUsers() {
-        $.ajax({
-            url: App.apiUrl + '/api/users',
-            type: 'GET'
-        }).done(users => {
-            this.setState({users});
-        })
+        this.setState({users:userStub})
+        // $.ajax({
+        //     url: App.apiUrl + '/api/users',
+        //     type: 'GET'
+        // }).done(users => {
+        //     this.setState({users});
+        // })
     }
 
     selectUser(userId) {
@@ -38,25 +43,15 @@ class App extends Component {
 
     render() {
 
-        const { users } = this.state;
-
         return (
-
             <main>
-                <ul>
-                    {
-                        users.map( user =>
-                            <li key={id} id={id}>
-                                { user.firstName } {user.fullName}
-                                <img src={avatar.url} alt="users icon"/>
-                            </li>
-                        )
-                    }
-                </ul>
+                <Users users={this.state.users} />
+
                 <section>
+                {
 
+                }
                 </section>
-
             </main>
         );
     }
