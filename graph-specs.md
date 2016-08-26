@@ -84,3 +84,6 @@ RETURN u,s,o,st
 
 #### Get a list with the amount of languages for each user
     MATCH (user: User) -[owns: OWNS]-> (repository: Repository) -[uses: USES]-> (language: Language {}) return user..name, count(language) ORDER BY count(language) desc
+
+#### Get all repositories from mike van riel
+    MATCH (u:User {username: "mvriel"})-[:OWNS]->(o) OPTIONAL MATCH (u:User {username: "mvriel"})-[:SUBSCRIBES_TO]->(s) RETURN u,s,o
