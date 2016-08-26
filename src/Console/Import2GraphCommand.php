@@ -115,9 +115,9 @@ class Import2GraphCommand extends Command
 
                         // don't add if it exists
                         if (! $repositoryRepository->findOneBy('repositoryId', $repo->getId())) {
-                            $userNode->ownsRepository($repoNode);
                             $repositoryRepository->persist($repoNode);
                         }
+                        $userNode->ownsRepository($repoNode);
                     }
                     $repositoryRepository->flush();
                 }
@@ -132,9 +132,9 @@ class Import2GraphCommand extends Command
 
                         // don't add if it exists
                         if (! $repositoryRepository->findOneBy('repositoryId', $repo->getId())) {
-                            $userNode->subsribesToRepository($repoNode);
                             $repositoryRepository->persist($repoNode);
                         }
+                        $userNode->subsribesToRepository($repoNode);
                     }
                     $repositoryRepository->flush();
                 }
@@ -149,9 +149,9 @@ class Import2GraphCommand extends Command
 
                         // don't add if it exists
                         if (! $repositoryRepository->findOneBy('repositoryId', $repo->getId())) {
-                            $userNode->starRepository($repoNode);
                             $repositoryRepository->persist($repoNode);
                         }
+                        $userNode->starRepository($repoNode);
                     }
                     $repositoryRepository->flush();
                 }
