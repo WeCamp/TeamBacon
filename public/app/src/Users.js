@@ -8,7 +8,7 @@ class Users extends Component {
     }
 
     render() {
-        var { users, selectUser } = this.props;
+        const { users, selectUser } = this.props;
 
         return(
             <div className="col-xs-4 panel panel-default">

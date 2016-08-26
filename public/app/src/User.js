@@ -2,13 +2,7 @@ import React, { Component } from 'react';
 
 class User extends Component {
 
-    constructor(props) {
-        super(props);
-
-        this.onClick = this.onClick.bind(this);
-    }
-
-    onClick(e) {
+    onClick = (e) => {
         e.preventDefault();
 
         this.props.selectUser(
@@ -17,7 +11,7 @@ class User extends Component {
     }
 
     render() {
-        var { userName, avatar } = this.props;
+        const { userName, avatar } = this.props;
 
         return(
             <div>

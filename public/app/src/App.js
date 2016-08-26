@@ -5,15 +5,14 @@ import $ from 'jquery';
 
 class App extends Component {
 
-    apiUrl = 'http://192.168.99.100:8080';
+    static apiUrl = 'http://192.168.99.100:8080';
 
     constructor(props) {
         super(props);
 
-        this.getUsers = this.getUsers.bind(this);
-
         this.state = {
-            users: []
+            users: [],
+            selectedUser: undefined
         };
 
         this.getUsers();
@@ -21,36 +20,44 @@ class App extends Component {
 
     getUsers() {
         $.ajax({
-            url: this.apiUrl + '/api/users',
+            url: App.apiUrl + '/api/users',
             type: 'GET'
-        }).done((data) => {
-            var state = this.state;
-            state.users = data;
-            this.setState(state);
+        }).done(users => {
+            this.setState({users});
         })
     }
 
     selectUser(userId) {
         $.ajax({
-            url: this.apiUrl +'/api/users/' + userId,
+            url: App.apiUrl +'/api/users/' + userId,
             type: 'GET'
-        }).done((selectedUser) => {
-            var state = this.state;
-            state.selectedUser = selectedUser;
-            this.setState(state);
+        }).done(selectedUser => {
+            this.setState({selectedUser});
         });
     }
 
     render() {
 
+        const { users } = this.state;
+
         return (
-            <div className="container">
-                <div className="row">
-                    <h1>Six degrees of Bacon</h1>
-                    <Users selectUser={ this.selectUser.bind(this) } users={ this.state.users }/>
-                    <Content />
-                </div>
-            </div>
+
+            <main>
+                <ul>
+                    {
+                        users.map( user =>
+                            <li key={id} id={id}>
+                                { user.firstName } {user.fullName}
+                                <img src={avatar.url} alt="users icon"/>
+                            </li>
+                        )
+                    }
+                </ul>
+                <section>
+
+                </section>
+
+            </main>
         );
     }
 }
