@@ -6,8 +6,10 @@ namespace Bacon\Console;
 
 use Bacon\Config\Config;
 use Bacon\Entity\Language;
+use Bacon\Entity\Location;
 use Bacon\Entity\Repository;
 use Bacon\Repository\Neo4jLanguageRepository;
+use Bacon\Repository\Neo4jLocationRepository;
 use Bacon\Repository\Neo4jRepositoryRepository;
 use Bacon\Repository\Neo4jUserRepository;
 use Bacon\Service\Crawler\Dto\User as IncomingUser;
@@ -43,6 +45,7 @@ class Import2GraphCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        ini_set('memory_limit','400M');
         $object = $input->getArgument('object');
 
         // outputs multiple lines to the console (adding "\n" at the end of each line)
@@ -54,6 +57,7 @@ class Import2GraphCommand extends Command
 
         $this->em = EntityManager::create(Config::get()['neo4jHost']);
         $this->languageRepo = new Neo4jLanguageRepository($this->em);
+        $this->locationRepo = new Neo4jLocationRepository($this->em);
 
         if ('user' === $object) {
             $this->handleUsers($output);
@@ -81,18 +85,9 @@ class Import2GraphCommand extends Command
 
         $users = $org->getMembers()->all();
 
-        // Extract and create Locations
-
-
-        // Extract and create Languages
+        // Extract and create Locations and Languages
+//        $this->extractLocationsFromDTOUsers($users);
         $this->extractRepoLanguagesFromDTOUsers($users);
-
-        // Extract and creates repos associating them to languages
-        $repos = [
-            'wecamp/teambacon' => new Repository(),
-        ];
-        // Extract and create users associating them to repo and language
-        //$users = $org->getMembers()->getAFew(4);
 
         $output->writeln('Found ' . count($users) . ' users.');
         if (! $users) {
@@ -164,9 +159,17 @@ class Import2GraphCommand extends Command
     }
 
 
-    private function extractLocationsFromDTOUser(\Bacon\Service\Crawler\Dto\User $user)
+    private function extractLocationsFromDTOUsers(array $users)
     {
-
+        foreach ($users as $user) {
+            $location = $user->getLocation();
+            if (!isset($this->locations[(string) $location])) {
+                $locationNode = new Location();
+                $locationNode->setLocation((string) $location);
+                $this->locationRepo->persist($locationNode);
+                $this->locations[(string) $location] = $locationNode;
+            }
+        }
     }
 
     private function extractRepoLanguagesFromDTOUsers(array $users)
@@ -174,11 +177,11 @@ class Import2GraphCommand extends Command
         foreach ($users as $user) {
             foreach ($user->getRepos() as $repo) {
                 foreach ($repo->getLang() as $DTOLanguage) {
-                    if (!isset($this->languages[$DTOLanguage->getLanguage()])) {
+                    if (!isset($this->languages[(string) $DTOLanguage->getLanguage()])) {
                         $languageNode = new Language();
-                        $languageNode->setLanguageName($DTOLanguage->getLanguage());
+                        $languageNode->setLanguageName((string) $DTOLanguage->getLanguage());
                         $this->languageRepo->persist($languageNode);
-                        $this->languages[$DTOLanguage->getLanguage()] = $languageNode;
+                        $this->languages[(string) $DTOLanguage->getLanguage()] = $languageNode;
                     }
                 }
             }
@@ -202,7 +205,10 @@ class Import2GraphCommand extends Command
         $node->setUrl((string)$repository->getUrl());
         foreach ($repository->getLang() as $language)
         {
-            $node->useLanguage($this->languages[$language->getLanguage()]);
+            if ($this->languages[$language->getLanguage()])
+            {
+                $node->useLanguage($this->languages[$language->getLanguage()]);
+            }
         }
 
         return $node;
