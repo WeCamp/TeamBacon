@@ -59,9 +59,13 @@ class Import2GraphCommand extends Command
         $this->languageRepo = new Neo4jLanguageRepository($this->em);
         $this->locationRepo = new Neo4jLocationRepository($this->em);
 
+
         if ('user' === $object) {
-            $this->handleUsers($output);
-            $this->handleLanguages($output);
+            $controller = new \Bacon\Service\Crawler\Controllers\CrawlerController();
+            $org = $controller->getData();
+
+            $this->handleUsers($output, $org);
+            $this->handleLanguages($output, $org);
         }
 
         $output->writeln('All done.');
@@ -75,7 +79,7 @@ class Import2GraphCommand extends Command
      * @param OutputInterface $output
      * @return \Bacon\Service\Crawler\Bags\UserBag
      */
-    private function handleUsers(OutputInterface $output)
+    private function handleUsers(OutputInterface $output, $org)
     {
 
         $output->writeln('Fetching user details.');
@@ -176,12 +180,10 @@ class Import2GraphCommand extends Command
     }
 
 
-    private function handleLanguages(OutputInterface $output)
+    private function handleLanguages(OutputInterface $output, $org)
     {
         $output->writeln('Fetching language details.');
 
-        $controller = new \Bacon\Service\Crawler\Controllers\CrawlerController();
-        $org = $controller->getData();
         $repositoryRepository = new Neo4jRepositoryRepository($this->em);
 
         $users = $org->getMembers()->all();
