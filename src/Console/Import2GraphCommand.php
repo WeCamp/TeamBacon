@@ -45,7 +45,7 @@ class Import2GraphCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        ini_set('memory_limit','-1');
+        ini_set('memory_limit', '-1');
         $object = $input->getArgument('object');
 
         // outputs multiple lines to the console (adding "\n" at the end of each line)
@@ -111,10 +111,10 @@ class Import2GraphCommand extends Command
                 if ($repoCount > 0) {
                     $output->writeln('Handling ' . $user->getLogin() . ' user owns ' . $repoCount . ' repos.');
                     foreach ($repos as $repo) {
-                        $repoNode = $this->transformDTORepo2GraphRepo($repo);
-
-                        // don't add if it exists
-                        if (! $repositoryRepository->findOneBy('repositoryId', $repo->getId())) {
+                        $repoNode = $repositoryRepository->findOneBy('repositoryId', $repo->getId());
+                        if (! $repoNode) {
+                            // create a new one
+                            $repoNode = $this->transformDTORepo2GraphRepo($repo);
                             $repositoryRepository->persist($repoNode);
                         }
                         $userNode->ownsRepository($repoNode);
@@ -128,10 +128,10 @@ class Import2GraphCommand extends Command
                 if ($repoCount > 0) {
                     $output->writeln('User subscibed to ' . $repoCount . ' repos.');
                     foreach ($repos as $repo) {
-                        $repoNode = $this->transformDTORepo2GraphRepo($repo);
-
-                        // don't add if it exists
-                        if (! $repositoryRepository->findOneBy('repositoryId', $repo->getId())) {
+                        $repoNode = $repositoryRepository->findOneBy('repositoryId', $repo->getId());
+                        if (! $repoNode) {
+                            // create a new one
+                            $repoNode = $this->transformDTORepo2GraphRepo($repo);
                             $repositoryRepository->persist($repoNode);
                         }
                         $userNode->subsribesToRepository($repoNode);
@@ -145,10 +145,10 @@ class Import2GraphCommand extends Command
                 if ($repoCount > 0) {
                     $output->writeln('User starred ' . $repoCount . ' repos.');
                     foreach ($repos as $repo) {
-                        $repoNode = $this->transformDTORepo2GraphRepo($repo);
-
-                        // don't add if it exists
-                        if (! $repositoryRepository->findOneBy('repositoryId', $repo->getId())) {
+                        $repoNode = $repositoryRepository->findOneBy('repositoryId', $repo->getId());
+                        if (! $repoNode) {
+                            // create a new one
+                            $repoNode = $this->transformDTORepo2GraphRepo($repo);
                             $repositoryRepository->persist($repoNode);
                         }
                         $userNode->starRepository($repoNode);
@@ -198,10 +198,8 @@ class Import2GraphCommand extends Command
                 $output->writeln('Handling ' . $user->getLogin() . ' user owns ' . $repoCount . ' repos.');
                 foreach ($repos as $repo) {
                     $repository = $repositoryRepository->findOneBy('repositoryId', $repo->getId());
-                    foreach ($repo->getLang() as $language)
-                    {
-                        if ($this->languages[$language->getLanguage()])
-                        {
+                    foreach ($repo->getLang() as $language) {
+                        if ($this->languages[$language->getLanguage()]) {
                             $repository->useLanguage($this->languages[$language->getLanguage()]);
                         }
                     }
@@ -218,11 +216,11 @@ class Import2GraphCommand extends Command
     {
         foreach ($users as $user) {
             $location = $user->getLocation();
-            if (!isset($this->locations[(string) $location])) {
+            if (! isset($this->locations[(string)$location])) {
                 $locationNode = new Location();
-                $locationNode->setLocation((string) $location);
+                $locationNode->setLocation((string)$location);
                 $this->locationRepo->persist($locationNode);
-                $this->locations[(string) $location] = $locationNode;
+                $this->locations[(string)$location] = $locationNode;
             }
         }
     }
@@ -232,11 +230,11 @@ class Import2GraphCommand extends Command
         foreach ($users as $user) {
             foreach ($user->getRepos() as $repo) {
                 foreach ($repo->getLang() as $DTOLanguage) {
-                    if (!isset($this->languages[(string) $DTOLanguage->getLanguage()])) {
+                    if (! isset($this->languages[(string)$DTOLanguage->getLanguage()])) {
                         $languageNode = new Language();
-                        $languageNode->setLanguageName((string) $DTOLanguage->getLanguage());
+                        $languageNode->setLanguageName((string)$DTOLanguage->getLanguage());
                         $this->languageRepo->persist($languageNode);
-                        $this->languages[(string) $DTOLanguage->getLanguage()] = $languageNode;
+                        $this->languages[(string)$DTOLanguage->getLanguage()] = $languageNode;
                     }
                 }
             }
