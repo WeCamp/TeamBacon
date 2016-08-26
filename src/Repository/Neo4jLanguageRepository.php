@@ -31,6 +31,10 @@ final class Neo4jLanguageRepository implements LanguageRepository
     public function persist(Language $user)
     {
         $this->entityManager->persist($user);
+    }
+
+    public function flush()
+    {
         $this->entityManager->flush();
     }
 }

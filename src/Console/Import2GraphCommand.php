@@ -61,8 +61,8 @@ class Import2GraphCommand extends Command
 
         if ('user' === $object) {
             $this->handleUsers($output);
+            $this->handleLanguages($output);
         }
-
 
         $output->writeln('All done.');
     }
@@ -176,6 +176,44 @@ class Import2GraphCommand extends Command
     }
 
 
+    private function handleLanguages(OutputInterface $output)
+    {
+        $output->writeln('Fetching language details.');
+
+        $controller = new \Bacon\Service\Crawler\Controllers\CrawlerController();
+        $org = $controller->getData();
+        $repositoryRepository = new Neo4jRepositoryRepository($this->em);
+
+        $users = $org->getMembers()->all();
+
+        // Extract and create Languages
+        $this->extractRepoLanguagesFromDTOUsers($users);
+
+        // all data is delivered in one big blob
+        foreach ($users as $user) {
+            // repositories a user owns
+            $repos = $user->getRepos()->all();
+            $repoCount = count($repos);
+            if ($repoCount > 0) {
+                $output->writeln('Handling ' . $user->getLogin() . ' user owns ' . $repoCount . ' repos.');
+                foreach ($repos as $repo) {
+                    $repository = $repositoryRepository->findOneBy('repositoryId', $repo->getId());
+                    foreach ($repo->getLang() as $language)
+                    {
+                        if ($this->languages[$language->getLanguage()])
+                        {
+                            $repository->useLanguage($this->languages[$language->getLanguage()]);
+                        }
+                    }
+                    $repositoryRepository->persist($repository);
+
+                }
+                $output->writeln('FLushing');
+                $repositoryRepository->flush();
+            }
+        }
+    }
+
     private function extractLocationsFromDTOUsers(array $users)
     {
         foreach ($users as $user) {
@@ -203,6 +241,7 @@ class Import2GraphCommand extends Command
                 }
             }
         }
+        $this->languageRepo->flush();
     }
 
     /**
@@ -220,13 +259,6 @@ class Import2GraphCommand extends Command
         $node->setBlog((string)$repository->getBlog());
         $node->setFullName((string)$repository->getFullName());
         $node->setUrl((string)$repository->getUrl());
-        foreach ($repository->getLang() as $language)
-        {
-            if ($this->languages[$language->getLanguage()])
-            {
-                $node->useLanguage($this->languages[$language->getLanguage()]);
-            }
-        }
 
         return $node;
     }
