@@ -23,6 +23,22 @@ final class Neo4jUserRepository implements UserRepository
     }
 
     /**
+     * @param int $userId
+     * @return User
+     */
+    public function get(int $userId): User
+    {
+        $user = $this->entityManager->find(User::class, $userId);
+
+        if (!$user) {
+            throw new UserNotFoundInGraphException();
+        }
+
+        return $user;
+
+    }
+
+    /**
      * @return User[]
      */
     public function findAll(): array
@@ -57,5 +73,4 @@ final class Neo4jUserRepository implements UserRepository
     {
         $this->entityManager->flush();
     }
-
 }

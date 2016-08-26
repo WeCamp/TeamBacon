@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Bacon\Entity;
 
+use Bacon\Entity\Repository;
 use Doctrine\Common\Collections\ArrayCollection;
 use GraphAware\Neo4j\OGM\Annotations as OGM;
 
@@ -199,6 +200,31 @@ class User
         $this->avatar = $avatar;
     }
 
+
+    /**
+     * @return ArrayCollection|Repository[]
+     */
+    public function getRepositoriesSubscribedTo(): ArrayCollection
+    {
+        return $this->repositoriesSubscribedTo;
+    }
+
+    /**
+     * @return ArrayCollection|Repository[]
+     */
+    public function getRepositoryOwns(): ArrayCollection
+    {
+        return $this->repositoriesOwns;
+    }
+
+    /**
+     * @return ArrayCollection|Repository[]
+     */
+    public function getRepositoriesStars(): ArrayCollection
+    {
+        return $this->repositoriesStars;
+    }
+
     /**
      * Check the unique property in order to prevent creating the ode twice
      *
@@ -213,5 +239,4 @@ class User
 
         return false;
     }
-
 }

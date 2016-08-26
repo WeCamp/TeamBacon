@@ -60,7 +60,7 @@ class Repository
     private $location;
 
     /**
-     * @OGM\Relationship(type="OWNS", direction="OUTGOING", targetEntity="Bacon\Entity\User", collection=true, mappedBy="repositoriesContributesTo")
+     * @OGM\Relationship(type="OWNS", direction="OUTGOING", targetEntity="Bacon\Entity\User", collection=true, mappedBy="usersSubscribedToRepository")
      * @var ArrayCollection|User[]
      */
     private $usersOwnsRepository;

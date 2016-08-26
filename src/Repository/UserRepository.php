@@ -8,6 +8,12 @@ use Bacon\Entity\User;
 interface UserRepository
 {
     /**
+     * @param int $userId
+     * @return User
+     */
+    public function get(int $userId): User;
+
+    /**
      * @return array
      */
     public function findAll(): array;
