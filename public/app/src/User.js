@@ -2,32 +2,15 @@ import React, { Component } from 'react';
 
 class User extends Component {
 
-    constructor(props) {
-        super(props);
-
-        this.onClick = this.onClick.bind(this);
-    }
-
-    onClick(e) {
-        e.preventDefault();
-
-        this.props.selectUser(
-            this.props.id
-        );
-    }
-
     render() {
-        var { userName, avatar } = this.props;
+        const { user:{ fullName, userName, avatar, id } } = this.props;
 
         return(
-            <div>
-                <li>
-                    <span>
-                        <img className="avatar-image" src={`${avatar}`} height="23" />
-                        <a href="#" onClick={ this.onClick }>{ userName }</a>
-                    </span>
-                </li>
-            </div>
+            <li className="users-list-user">
+                <span title={userName}>{fullName ? fullName : userName}</span>
+                <img className="users-list-user-avatar" src={avatar} alt="users icon"/>
+                <button onClick={()=>{this.props.selectUser(id)}}>{ userName }</button>
+            </li>
         );
     }
 }

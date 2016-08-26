@@ -49,58 +49,46 @@ final class UserController
         /** @var User $user */
         $user = $this->userRepository->get($userId);
 
-        $serializedUser = [
+        $userInformation = $this->userInformationWithRepositories($user);
+
+        return $response->withHeader('Content-type', 'application/json')
+            ->withHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:3000')
+            ->withJson($userInformation, 200);
+    }
+
+    private function userInformationWithRepositories(User $user): array
+    {
+        return [
             'id' => $user->getId(),
             'userName' => $user->getUsername(),
             'fullName' => $user->getName(),
             'bio' => $user->getBio(),
             'avatar' => $user->getAvatar(),
             'repositoriesOwned' => array_map(
-                function (Repository $repository) {
-                    return [
-                        'id' => $repository->getId(),
-                        'repositoryId' => $repository->getRepositoryId(),
-                        'name' => $repository->getName(),
-                        'fullName' => $repository->getFullName(),
-                        'blog' => $repository->getBlog(),
-                        'description' => $repository->getDescription(),
-                        'url' => $repository->getUrl(),
-                    ];
-                },
+                $this->serializeRepositoryToArray,
                 $user->getRepositoryOwns()->toArray()
             ),
             'repositoriesSubscribedTo' => array_map(
-                function (Repository $repository) {
-                    return [
-                        'id' => $repository->getId(),
-                        'repositoryId' => $repository->getRepositoryId(),
-                        'name' => $repository->getName(),
-                        'fullName' => $repository->getFullName(),
-                        'blog' => $repository->getBlog(),
-                        'description' => $repository->getDescription(),
-                        'url' => $repository->getUrl(),
-                    ];
-                },
+                $this->serializeRepositoryToArray,
                 $user->getRepositoriesSubscribedTo()->toArray()
             ),
             'repositoriesStarred' => array_map(
-                function (Repository $repository) {
-                    return [
-                        'id' => $repository->getId(),
-                        'repositoryId' => $repository->getRepositoryId(),
-                        'name' => $repository->getName(),
-                        'fullName' => $repository->getFullName(),
-                        'blog' => $repository->getBlog(),
-                        'description' => $repository->getDescription(),
-                        'url' => $repository->getUrl(),
-                    ];
-                },
+                $this->serializeRepositoryToArray,
                 $user->getRepositoriesStars()->toArray()
             )
         ];
+    }
 
-        return $response->withHeader('Content-type', 'application/json')
-            ->withHeader('Access-Control-Allow-Origin', 'http://127.0.0.1:3000')
-            ->withJson($serializedUser, 200);
+    private function serializeRepositoryToArray(Repository $repository): array
+    {
+        return [
+            'id' => $repository->getId(),
+            'repositoryId' => $repository->getRepositoryId(),
+            'name' => $repository->getName(),
+            'fullName' => $repository->getFullName(),
+            'blog' => $repository->getBlog(),
+            'description' => $repository->getDescription(),
+            'url' => $repository->getUrl(),
+        ];
     }
 }

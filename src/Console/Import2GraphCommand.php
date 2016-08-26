@@ -5,7 +5,11 @@ namespace Bacon\Console;
 
 
 use Bacon\Config\Config;
+use Bacon\Entity\Language;
+use Bacon\Entity\Location;
 use Bacon\Entity\Repository;
+use Bacon\Repository\Neo4jLanguageRepository;
+use Bacon\Repository\Neo4jLocationRepository;
 use Bacon\Repository\Neo4jRepositoryRepository;
 use Bacon\Repository\Neo4jUserRepository;
 use Bacon\Service\Crawler\Dto\User as IncomingUser;
@@ -24,6 +28,10 @@ class Import2GraphCommand extends Command
 {
 
     private $em;
+    private $languages = [];
+    private $locations = [];
+    private $languageRepo;
+    private $locationRepo;
 
     protected function configure()
     {
@@ -37,6 +45,7 @@ class Import2GraphCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        ini_set('memory_limit','400M');
         $object = $input->getArgument('object');
 
         // outputs multiple lines to the console (adding "\n" at the end of each line)
@@ -47,6 +56,9 @@ class Import2GraphCommand extends Command
 
 
         $this->em = EntityManager::create(Config::get()['neo4jHost']);
+        $this->languageRepo = new Neo4jLanguageRepository($this->em);
+        $this->locationRepo = new Neo4jLocationRepository($this->em);
+
         if ('user' === $object) {
             $this->handleUsers($output);
         }
@@ -65,13 +77,17 @@ class Import2GraphCommand extends Command
      */
     private function handleUsers(OutputInterface $output)
     {
+
         $output->writeln('Fetching user details.');
 
         $controller = new \Bacon\Service\Crawler\Controllers\CrawlerController();
         $org = $controller->getData();
 
         $users = $org->getMembers()->all();
-        //$users = $org->getMembers()->getAFew(4);
+
+        // Extract and create Locations and Languages
+//        $this->extractLocationsFromDTOUsers($users);
+        $this->extractRepoLanguagesFromDTOUsers($users);
 
         $output->writeln('Found ' . count($users) . ' users.');
         if (! $users) {
@@ -89,10 +105,11 @@ class Import2GraphCommand extends Command
             if (! $userRepository->findOneBy('username', $user->getLogin())) {
                 $userNode = $this->transformDTOUser2GraphUser($user);
 
-                // a users repositories
+                // repositories a user owns
                 $repos = $user->getRepos()->all();
-                if (count($repos) > 0) {
-                    $output->writeln('User has repos.');
+                $repoCount = count($repos);
+                if ($repoCount > 0) {
+                    $output->writeln('User owns ' . $repoCount . ' repos.');
                     foreach ($repos as $repo) {
                         $repoNode = $this->transformDTORepo2GraphRepo($repo);
 
@@ -105,7 +122,39 @@ class Import2GraphCommand extends Command
                     $repositoryRepository->flush();
                 }
 
-                // users locations
+                // repositories a user subscribed to
+                $repos = $user->getSubscription()->all();
+                $repoCount = count($repos);
+                if ($repoCount > 0) {
+                    $output->writeln('User subscibed to ' . $repoCount . ' repos.');
+                    foreach ($repos as $repo) {
+                        $repoNode = $this->transformDTORepo2GraphRepo($repo);
+
+                        // don't add if it exists
+                        if (! $repositoryRepository->findOneBy('repositoryId', $repo->getId())) {
+                            $userNode->subsribesToRepository($repoNode);
+                            $repositoryRepository->persist($repoNode);
+                        }
+                    }
+                    $repositoryRepository->flush();
+                }
+
+                // repositories a user starred
+                $repos = $user->getStarred()->all();
+                $repoCount = count($repos);
+                if ($repoCount > 0) {
+                    $output->writeln('User starred ' . $repoCount . ' repos.');
+                    foreach ($repos as $repo) {
+                        $repoNode = $this->transformDTORepo2GraphRepo($repo);
+
+                        // don't add if it exists
+                        if (! $repositoryRepository->findOneBy('repositoryId', $repo->getId())) {
+                            $userNode->starRepository($repoNode);
+                            $repositoryRepository->persist($repoNode);
+                        }
+                    }
+                    $repositoryRepository->flush();
+                }
 
 
                 $userRepository->persist($userNode);
@@ -125,14 +174,33 @@ class Import2GraphCommand extends Command
     }
 
 
-    private function extractLocationsFromDTOUser(\Bacon\Service\Crawler\Dto\User $user)
+    private function extractLocationsFromDTOUsers(array $users)
     {
-
+        foreach ($users as $user) {
+            $location = $user->getLocation();
+            if (!isset($this->locations[(string) $location])) {
+                $locationNode = new Location();
+                $locationNode->setLocation((string) $location);
+                $this->locationRepo->persist($locationNode);
+                $this->locations[(string) $location] = $locationNode;
+            }
+        }
     }
 
-    private function extractLocationsFromDTORepo(\Bacon\Service\Crawler\Dto\Repository $repository)
+    private function extractRepoLanguagesFromDTOUsers(array $users)
     {
-
+        foreach ($users as $user) {
+            foreach ($user->getRepos() as $repo) {
+                foreach ($repo->getLang() as $DTOLanguage) {
+                    if (!isset($this->languages[(string) $DTOLanguage->getLanguage()])) {
+                        $languageNode = new Language();
+                        $languageNode->setLanguageName((string) $DTOLanguage->getLanguage());
+                        $this->languageRepo->persist($languageNode);
+                        $this->languages[(string) $DTOLanguage->getLanguage()] = $languageNode;
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -150,6 +218,13 @@ class Import2GraphCommand extends Command
         $node->setBlog((string)$repository->getBlog());
         $node->setFullName((string)$repository->getFullName());
         $node->setUrl((string)$repository->getUrl());
+        foreach ($repository->getLang() as $language)
+        {
+            if ($this->languages[$language->getLanguage()])
+            {
+                $node->useLanguage($this->languages[$language->getLanguage()]);
+            }
+        }
 
         return $node;
     }

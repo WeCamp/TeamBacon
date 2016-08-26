@@ -86,7 +86,7 @@ class User
     /**
      * @param Repository $repository
      */
-    public function watchRepository(Repository $repository)
+    public function subsribesToRepository(Repository $repository)
     {
         if (!$this->repositoriesSubscribedTo->contains($repository)) {
             $this->repositoriesSubscribedTo->add($repository);
