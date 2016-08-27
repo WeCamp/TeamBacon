@@ -63,3 +63,12 @@ body {
   display: inline-block !important;
   margin-left: -4px !important;
 }
+
+#query-panel {
+  padding: 10px;
+  height: 50px;
+}
+
+#panel-username-block {
+  padding-left: 10px;
+}

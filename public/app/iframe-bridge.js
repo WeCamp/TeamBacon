@@ -6,16 +6,41 @@ $(document).ready(function() {
     $('a[data-type=user]').click(
         function(e) {
             e.preventDefault();
-            selectUser($(this).attr('data-username'));
+
+            var userName = $(this).attr('data-username');
+
+            $('#panel-username').val(userName);
+            selectUser(userName);
         }
     );
+    
+    $('#coworkers-owns').click(function() {
+        selectCoworkersOwns($('#panel-username').val());
+    });
+
+    $('#coworkers-subscribes-to').click(function() {
+        selectCoworkersSubscribesTo($('#panel-username').val());
+    });
 });
 
-function selectUser(userName) {
+
+function executeQuery(query) {
     var codeMirror = neo4jIframe.$('.CodeMirror')[0].CodeMirror;
     var doc = codeMirror.getDoc();
-    doc.setValue('MATCH (u:User {username: "' + userName + '"})-[:SUBSCRIBES_TO]->(r) RETURN u,r limit 100');
+    doc.setValue(query);
     setTimeout(function() {
         neo4jIframe.$('a.success').click();
     }, 500);
+}
+
+function selectUser(userName) {
+    executeQuery('MATCH (u:User {username: "' + userName + '"})-[:SUBSCRIBES_TO]->(r) RETURN u,r limit 100');
+}
+
+function selectCoworkersOwns(userName) {
+    executeQuery('MATCH (mike:User {username: "' + userName + '"})-[:OWNS]->(repo)<-[:SUBSCRIBES_TO]-(coWorker:User) RETURN mike, coWorker, repo');
+}
+
+function selectCoworkersSubscribesTo(userName) {
+    executeQuery('MATCH (mike:User {username: "' + userName + '"})-[:SUBSCRIBES_TO]->(repo)<-[:SUBSCRIBES_TO]-(coWorker:User) RETURN mike, coWorker, repo');
 }
