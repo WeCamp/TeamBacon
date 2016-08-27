@@ -73,8 +73,8 @@ class Import2GraphCommand extends Command
             $this->handleUsers($output, $org);
             $this->handleLocation($output, $org);
             $this->handleFollowingUsers($output);
-            $this->handleFollowing($output, $org);
             $this->handleLanguages($output, $org);
+            $this->handleFollowing($output, $org);
             $this->handleFollowers($output, $org);
         }
         if ('followers' === $object) {
