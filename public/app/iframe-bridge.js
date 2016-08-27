@@ -1,3 +1,7 @@
+'use strict';
+
+var neo4jIframe = $('#neo4j')[0].contentWindow;
+
 $(document).ready(function() {
     $('a[data-type=user]').click(
         function(e) {
@@ -8,9 +12,10 @@ $(document).ready(function() {
 });
 
 function selectUser(userName) {
-    $('#neo4j')[0].contentWindow.$('div[class="CodeMirror cm-s-neo CodeMirror-wrap"]').click();
-    $('#neo4j')[0].contentWindow.$('#editor textarea').val(
-        'MATCH (u:User {username: "' + userName + '"})-[:SUBSCRIBES_TO]->(r) RETURN u,r limit 100'
-    );
+    var codeMirror = neo4jIframe.$('.CodeMirror')[0].CodeMirror;
+    var doc = codeMirror.getDoc();
+    doc.setValue('MATCH (u:User {username: "' + userName + '"})-[:SUBSCRIBES_TO]->(r) RETURN u,r limit 100');
+    setTimeout(function() {
+        neo4jIframe.$('a.success').click();
+    }, 500);
 }
-

@@ -33,11 +33,13 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
-            <ul class="nav nav-sidebar">
+            <ul id="users" class="nav nav-sidebar">
                 <?php foreach ($data['users'] as $user): ?>
                     <li class="clearfix">
-                        <p class="pull-left"><img class="img-circle" src="<?php echo $user->getAvatar();?>" style="width:50px;height:50px;" alt=""/></p>
-                        <a href="" data-type="user" data-username="<?= $user->getUsername(); ?>" style="display: inline-block;margin-left:-4px;"><?php echo $user->getUsername(); ?></a>
+                        <p class="pull-left"><img class="img-circle avatar" src="<?php echo $user->getAvatar();?>" alt=""/></p>
+                        <a href="" data-type="user" data-username="<?= $user->getUsername(); ?>" class="username">
+                            <?php echo $user->getUsername(); ?>
+                        </a>
                     </li>
                 <?php endforeach; ?>
             </ul>
