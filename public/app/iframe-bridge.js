@@ -21,6 +21,14 @@ $(document).ready(function() {
     $('#coworkers-subscribes-to').click(function() {
         selectCoworkersSubscribesTo($('#panel-username').val());
     });
+
+    $('#lang-php').click(function() {
+        language('PHP');
+    });
+
+    $('#lang-cobol').click(function() {
+        language('COBOL');
+    });
 });
 
 
@@ -43,4 +51,8 @@ function selectCoworkersOwns(userName) {
 
 function selectCoworkersSubscribesTo(userName) {
     executeQuery('MATCH (mike:User {username: "' + userName + '"})-[:SUBSCRIBES_TO]->(repo)<-[:SUBSCRIBES_TO]-(coWorker:User) RETURN mike, coWorker, repo');
+}
+
+function language(language) {
+    executeQuery("MATCH (user: User) -[owns: OWNS]-> (repository: Repository) -[uses: USES]-> (language: Language {languageName: '" + language + "'}) return user, repository");
 }

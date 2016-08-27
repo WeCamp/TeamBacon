@@ -90,6 +90,12 @@ class Import2GraphCommand extends Command
             $this->handleFollowing($output, $org);
         }
 
+        if ('lang' === $object) {
+            $controller = new \Bacon\Service\Crawler\Controllers\CrawlerController();
+            $org = $controller->getData();
+            $this->handleLanguages($output, $org);
+        }
+
         $output->writeln('All done.');
     }
 
