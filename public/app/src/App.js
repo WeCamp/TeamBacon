@@ -6,7 +6,7 @@ import $ from 'jquery';
 
 class App extends Component {
 
-    static apiUrl = 'http://192.168.99.100:8080';
+    static apiUrl = 'http://127.0.0.1:8080';
 
     constructor(props) {
         super(props);

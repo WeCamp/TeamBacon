@@ -10,7 +10,7 @@ that returns an array, e.g.
     <?php
     
     return [
-        'neo4jHost' => 'http://neo4j:neo4jneo4j@192.168.99.100:7474'
+        'neo4jHost' => 'http://neo4j:neo4jneo4j@127.0.0.1:7474'
     ];
 
 ## CLI script 
